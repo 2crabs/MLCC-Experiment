@@ -18,26 +18,26 @@ dt = end/steps
 t = 0
 
 #voltage across capacitor
-out = 0
+Vc = 0
 
 writer.writerow([0, 0])
 
 #DC Bias capacitor
 for i in range(steps):
     #Voltage and thus current across resistor during this step
-    Vr = V-out
+    Vr = V-Vc
     I = Vr/R
 
     #Linear approximation of capacitance due to DC bias
-    C_bias = 22e-6 - (2.33e-6 * out)
+    C_bias = 22e-6 - (2.33e-6 * Vc)
 
     #Based on current and amount of time, increment voltage
     dv = (I*dt)/C
-    out = out + dv
+    Vc = Vc + dv
 
     #record result
     t = t + dt
-    writer.writerow([t, out])
+    writer.writerow([t, Vc])
 
 
 
