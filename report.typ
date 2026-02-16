@@ -747,7 +747,7 @@ $ (- t) / R =  (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_c $
   #set block(spacing: 1.5em)
   $ (- t) / R =  (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_c $
   $ -t =   - R C_2 V_c + (R) (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) $
-  $ t =   R C_2 V_c - (R) (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) $
+  $ bold(t =   R C_2 V_c - (R) (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in"))) $
 ]
 
 
@@ -766,5 +766,5 @@ $ (- t) / R =  (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_c $
   $ V_"in"e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in")) =   V_"in" - V_C $
   $ V_"in"e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in")) - V_"in" = - V_C $
   $ -V_"in"e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in")) + V_"in" = V_C $
-  $ V_"in" (1 - e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in"))) = V_C $
+  $ bold(V_"in" (1 - e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in"))) = V_C) $
 ]
