@@ -2,6 +2,7 @@
 #import "@preview/lilaq:0.5.0" as lq
 #import "@preview/codelst:2.0.2": sourcecode, sourcefile
 #import "@preview/equate:0.3.2": equate
+#import "@preview/showybox:2.0.4": showybox
 
 #show: equate.with(breakable: true, sub-numbering: true, number-mode: "label")
 #set math.equation(numbering: "(1.1)")
@@ -24,6 +25,9 @@
     
   ]
 }
+
+#let colorFormula(body, color) = text(fill: color)[$#body$]
+
 #let simpleMathNote(body, right, left) = {
   align(center)[
     #table(
@@ -136,22 +140,22 @@ To understand their function and why they are universally used, it is important 
   caption: "A popular cartoon representing voltage and amperage"
 )<ohms>
 
-When a voltage difference, such as from a battery, is applied across a conductor, current is allowed to flow unrestricted through that conductor. An electrical drawing known as a schematic can be used to respresent these connections
+When a voltage difference, such as from a battery, is applied across a conductor, current is allowed to flow unrestricted through that conductor. An electrical drawing known as a schematic can be used to respresent these connections as @schematicIntro shows.
 
 #figure(
-  image("imgs/placeholder.jpg"),
-  caption: "Voltage across conductor"
+  image("imgs/short.png", height: 90pt, fit: "contain"),
+  caption: "Voltage across conductor",
 )<schematicIntro>
 
-This is known as a short circuit. The amount of current flowing can be limited by using a resistor. A resistor is a component where the current flowing is directly proportional to the amount of voltage across the resistor. This relationship is shown in the following equation where $V="voltage"$ (measured in volts), $I= "current"$ (measured in Amps), and $R= "Resistance"$ (measured in ohms, represented #sym.Omega).
+This is known as a short circuit. The amount of current flowing can be limited by using a resistor. A resistor is a component where the current flowing is directly proportional to the amount of voltage across the resistor. This relationship is shown in the following equation where $V="voltage"$ (measured in volts), $I= "current"$ (measured in amperes), and $R= "resistance"$ (measured in ohms, represented #sym.Omega).
 
 $ V = I dot R $<eqOhmsLaw>
 
-This relationship is known as Ohm's Law and again can be depicted in a schematic as shown in .
+This relationship is known as Ohm's Law and the accompanying circuit can be depicted by a schematic as shown in @schematicR.
 
 #figure(
-  image("imgs/placeholder.jpg"),
-  caption: "Voltage across Resistor"
+  image("imgs/resistor.png", height: 90pt, fit: "contain"),
+  caption: "Voltage across resistor"
 )<schematicR>
 
 As an example, if a 5V battery is connected to a 100#sym.Omega resistor, the current can be found.
@@ -169,8 +173,8 @@ $ I = C (d V)/(d t) $<eqC>
 where $C$ is the capacitance in Farads. When a capacitor is connected to a constant current source the voltage across the capacitor will increase at a constant rate. The schematic of this situation is depicted in @schematicC. Conversely when a capacitor provides a constant current the voltage decreases at a linear rate.
 
 #figure(
-  image("imgs/placeholder.jpg"),
-  caption: "Voltage across Resistor"
+  image("imgs/capacitor.png", height: 90pt, fit: "contain"),
+  caption: "Constant current into capacitor"
 )<schematicC>
 
  Functionally, a capacitor acts similarly to a battery in that it can be charged and then discharged.
@@ -596,60 +600,171 @@ This python script was used to generate data for all five simulation results sho
 #pagebreak()
 = Derivations <appB>
 
-$ (- d t) / (R (C_1-C_2 dot V_C)) = (d V)/ (V_C - V_"in") $
-$ (- d t) / (R ) = ((C_1-C_2 V_C) dot (d V))/ (V_C - V_"in") $
-$ integral_0^t (- d t) / (R ) = integral_0^V_C ((C_1-C_2 V_C) dot (d V))/ (V_C - V_"in") $
 
-First part
+#let eqColor1 = yellow
+#let eqColor2 = blue.lighten(30%)
+#let eqColor3 = green
+#let eqColor4 = purple.lighten(30%)
+#let eqColor5 = purple.lighten(60%)
+#let eqColor6 = purple.lighten(10%)
 
-$ integral_0^t ((- d t) / (R)) = - t / R $
+#set block(spacing: 0.0em)
 
-Split in two
-$ integral_0^V_c (C_1-C_2 V_C)/ (V_C - V_"in") d V $
+#showybox(
+  title: [Deriving Modified RC Formula],
+  title-style: (color: black),
+  frame: (
+    title-color: black.transparentize(95%),
+    radius: (bottom-right: 0pt, rest: 10pt)
+  )
+)[
+  #set block(spacing: 1.5em)
+  $ (- d t) / (R (C_1-C_2 dot V_C)) = (d V)/ (V_C - V_"in") $
+  $ (- d t) / (R ) = ((C_1-C_2 V_C) dot (d V))/ (V_C - V_"in") $
+  $ colorFormula(integral_0^t (- d t) / (R ), #yellow) = colorFormula(integral_0^V_C ((C_1-C_2 V_C) dot (d V))/ (V_C - V_"in"), #blue) $
+]
 
-First part ($C_1$)
-$ integral_0^V_c C_1/ (V_C - V_"in") d V $
-$ C_1 ln(|V_C - V_"in"|) - C_1 ln(|- V_"in"|) $
-$ C_1 ln(V_"in" - V_C) - C_1 ln(V_"in") $
+#showybox(
+  title: [], width: 95%,
+  align: right,
+  title-style: (color: black),
+  frame: (
+    title-color: eqColor1,
+    radius: (rest: 0pt)
+  )
+)[
+  #set block(spacing: 1.5em)
+  $ integral_0^t ((- d t) / (R)) $
+  $ bold(- t / R) $
+]
 
-Second part ($C_2 V_C$)
+#showybox(
+  title: [],
+  width: 95%,
+  align: right,
+  title-style: (color: black),
+  frame: (
+    title-color: eqColor2,
+    radius: (bottom-left: 10pt, rest: 0pt)
+  )
+)[
+  #set block(spacing: 1.5em)
+  $ integral_0^V_c (C_1-C_2 V_C)/ (V_C - V_"in") d V $
+  $ integral_0^V_c C_1/ (V_C - V_"in") + (-C_2 V_C)/ (V_C - V_"in") d V $
+  $ colorFormula(integral_0^V_c C_1/ (V_C - V_"in") d V, #green) + colorFormula(integral_0^V_c (-C_2 V_C)/ (V_C - V_"in") d V, #purple) $
+]
 
-$ integral_0^V_c (-C_2 V_C)/ (V_C - V_"in") d V $
-$ -C_2 integral_0^V_c V_C/ (V_C - V_"in") d V $
-$ -C_2 integral_0^V_c (V_C - V_"in")/ (V_C - V_"in") + V_"in"/ (V_C - V_"in") d V $
-$ -C_2 integral_0^V_c 1 + V_"in"/ (V_C - V_"in") d V $
+#showybox(
+  title: [],
+  width: 90%,
+  align: right,
+  title-style: (color: black),
+  frame: (
+    title-color: eqColor3,
+    radius: ( rest: 0pt)
+  )
+)[
+  #set block(spacing: 1.5em)
+  $ integral_0^V_c C_1/ (V_C - V_"in") d V $
+  $ C_1 ln(|V_C - V_"in"|) - C_1 ln(|- V_"in"|) $
+  $ bold(C_1 ln(V_"in" - V_C) - C_1 ln(V_"in")) $
+]
 
+#showybox(
+  title: [],
+  width: 90%,
+  align: right,
+  title-style: (color: black),
+  frame: (
+    title-color: eqColor4,
+    radius: (bottom-left: 10pt, rest: 0pt)
+  )
+)[
+  #set block(spacing: 1.5em)
+  $ integral_0^V_c (-C_2 V_C)/ (V_C - V_"in") d V $
+  $ -C_2 integral_0^V_c V_C/ (V_C - V_"in") d V $
+  $ -C_2 integral_0^V_c (V_C - V_"in")/ (V_C - V_"in") + V_"in"/ (V_C - V_"in") d V $
+  $ -C_2 integral_0^V_c 1 + V_"in"/ (V_C - V_"in") d V $
+  $ colorFormula(-C_2 integral_0^V_c 1 d V, #eqColor5) + colorFormula(-C_2 integral_0^V_c V_"in"/ (V_C - V_"in") d V, #eqColor6) $
+]
 
-Second Part A (1)
-$ -C_2 integral_0^V_c 1 d V $
-$ -C_2 V_c $
+#showybox(
+  title: [],
+  width: 85%,
+  align: right,
+  title-style: (color: black),
+  frame: (
+    title-color: eqColor5,
+    radius: (rest: 0pt)
+  )
+)[
+  #set block(spacing: 1.5em)
+  $ -C_2 integral_0^V_c 1 d V $
+  $ bold(-C_2 V_c) $
+]
 
+#showybox(
+  title: [],
+  width: 85%,
+  align: right,
+  title-style: (color: black),
+  frame: (
+    title-color: eqColor6,
+    radius: (bottom-left: 10pt, bottom-right: 10pt, rest: 0pt)
+  )
+)[
+  #set block(spacing: 1.5em)
+  $ -C_2 integral_0^V_c V_"in"/ (V_C - V_"in") d V $
+  $ -C_2 V_"in" integral_0^V_c 1 / (V_C - V_"in") d V $
+  $ -C_2 V_"in" ln(|V_C - V_"in"|) + C_2 V_"in" ln(|- V_"in"|) $
+  $ bold(-C_2 V_"in" ln(V_"in" - V_C) + C_2 V_"in" ln(V_"in")) $
+]
 
-Scond part B ($V_"in"$)
-$ -C_2 integral_0^V_c V_"in"/ (V_C - V_"in") d V $
-$ -C_2 V_"in" integral_0^V_c 1 / (V_C - V_"in") d V $
-$ -C_2 V_"in" ln(|V_C - V_"in"|) + C_2 V_"in" ln(|- V_"in"|) $
-$ -C_2 V_"in" ln(V_"in" - V_C) + C_2 V_"in" ln(V_"in") $
-
-
-Putting it all together
-
+#showybox(
+  title: [Combining results],
+  title-style: (color: black),
+  frame: (
+    title-color: black.transparentize(95%),
+    radius: (bottom-right: 0pt, bottom-left: 0pt, rest: 10pt)
+  )
+)[
+  #set block(spacing: 1.5em)
 $ (- t) / R = C_1 ln(V_"in" - V_C) - C_1 ln(V_"in") -C_2 V_"in" ln(V_"in" - V_C) + C_2 V_"in" ln(V_"in") - C_2 V_c $
 $ (- t) / R = ln(V_"in" - V_C) (C_1 - C_2 V_"in") - ln(V_"in") (-C_1 + C_2 V_"in") - C_2 V_c $
 $ (- t) / R = ln(V_"in" - V_C) (C_1 - C_2 V_"in") + ln(V_"in") (C_1 - C_2 V_"in") - C_2 V_c $
 $ (- t) / R =  (C_1 - C_2 V_"in") (ln(V_"in" - V_C) + ln(V_"in")) - C_2 V_c $
 $ (- t) / R =  (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_c $
+]
 
-Either find based on t like this ...
+#showybox(
+  title: [Isolating $t$],
+  title-style: (color: black),
+  frame: (
+    title-color: black.transparentize(95%),
+    radius: 0pt
+  )
+)[
+  #set block(spacing: 1.5em)
+  $ (- t) / R =  (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_c $
+  $ -t =   - R C_2 V_c + (R) (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) $
+  $ t =   R C_2 V_c - (R) (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) $
+]
 
-$ t =   R C_2 V_c - (R) (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) $
 
-
-or #emph[sort of] for $V_C$ like ...
-$ (- t) / R +  C_2 V_c =  (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) $
-$ ((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in") =   ln((V_"in" - V_C)/V_"in") $
-$ e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in")) =   (V_"in" - V_C)/V_"in" $
-$ V_"in"e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in")) =   V_"in" - V_C $
-$ V_"in"e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in")) - V_"in" = - V_C $
-$ -V_"in"e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in")) + V_"in" = V_C $
-$ V_"in" (1 - e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in"))) = V_C $
+#showybox(
+  title: [Isolating $V_C$],
+  title-style: (color: black),
+  frame: (
+    title-color: black.transparentize(95%),
+    radius: (bottom-right: 10pt, bottom-left: 10pt, rest: 1pt)
+  )
+)[
+  #set block(spacing: 1.5em)
+  $ (- t) / R +  C_2 V_c = (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) $
+  $ ((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in") =   ln((V_"in" - V_C)/V_"in") $
+  $ e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in")) =   (V_"in" - V_C)/V_"in" $
+  $ V_"in"e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in")) =   V_"in" - V_C $
+  $ V_"in"e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in")) - V_"in" = - V_C $
+  $ -V_"in"e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in")) + V_"in" = V_C $
+  $ V_"in" (1 - e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in"))) = V_C $
+]

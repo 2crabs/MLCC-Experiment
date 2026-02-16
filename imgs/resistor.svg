@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 2676 2834" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:square;stroke-miterlimit:1.5;">
+    <g transform="matrix(1,0,0,1,-3585.73,-3759.62)">
+        <g id="Resistor" transform="matrix(1,0,0,1,0,-1557.48)">
+            <g transform="matrix(1,0,0,1,-1782.48,-2642)">
+                <circle cx="6112.17" cy="9375.73" r="681.277" style="fill:none;stroke:black;stroke-width:69.55px;"/>
+            </g>
+            <g transform="matrix(0.832536,0,0,0.779522,-224.959,-88.5283)">
+                <path d="M5470.81,8206.03L5470.81,8498.1" style="fill:none;stroke:black;stroke-width:86.24px;"/>
+            </g>
+            <g transform="matrix(-1.52934e-16,0.779522,-0.832536,-1.43196e-16,11283.1,2157.47)">
+                <path d="M5470.81,8206.03L5470.81,8498.1" style="fill:none;stroke:black;stroke-width:86.24px;"/>
+            </g>
+            <g transform="matrix(-1.52934e-16,1,-0.832536,-1.83697e-16,11283.1,1634.7)">
+                <path d="M5470.81,8206.03L5470.81,8498.1" style="fill:none;stroke:black;stroke-width:75.59px;"/>
+            </g>
+            <g>
+                <g transform="matrix(0.810776,0,0,0.776248,-105.915,-137.25)">
+                    <path d="M5470.81,7973.87L5470.81,7107.31L7471.02,7107.31" style="fill:none;stroke:black;stroke-width:87.62px;"/>
+                </g>
+                <g transform="matrix(0.810776,2.21715e-17,-2.7346e-17,-0.776703,-105.915,13608.3)">
+                    <path d="M5470.81,7973.87L5470.81,7107.31L7471.02,7107.31" style="fill:none;stroke:black;stroke-width:87.6px;"/>
+                </g>
+                <g transform="matrix(1,0,0,0.999583,0,1560.2)">
+                    <path d="M5951.41,6530.58L5951.41,5631.84" style="fill:none;stroke:black;stroke-width:69.56px;stroke-miterlimit:1;"/>
+                </g>
+                <g transform="matrix(1,0,0,0.956839,-3.63798e-12,-8.98069)">
+                    <path d="M5951.41,6530.58L5951.41,5631.84" style="fill:none;stroke:black;stroke-width:71.06px;stroke-miterlimit:1;"/>
+                </g>
+            </g>
+            <g id="Resistor1" serif:id="Resistor" transform="matrix(6.51424e-17,1.06386,-1.57265,9.62972e-17,16767.8,3737.68)">
+                <path d="M2344.66,6886.33L2444.75,6748.09L2577.12,7021.65L2733.42,6736.37L2883.86,7021.65L3021.11,6733.93L3166.28,7021.65L3253.55,6867.33" style="fill:none;stroke:black;stroke-width:68.96px;stroke-linecap:butt;"/>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 7135 3629" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g transform="matrix(1,0,0,1,-1856.49,-10237.9)">
+        <g transform="matrix(1,0,0,1,-1757.15,1990.7)">
+            <g transform="matrix(0.874723,0,0,0.874723,2988.35,4533.37)">
+                <text x="6476.99px" y="6885.91px" style="font-family:'TeXGyreBonum-Italic', 'TeX Gyre Bonum';font-style:italic;font-size:677.386px;">C</text>
+            </g>
+            <g transform="matrix(0.874723,0,0,0.874723,-507.083,4533.37)">
+                <text x="6476.99px" y="6885.91px" style="font-family:'TeXGyreBonum-Italic', 'TeX Gyre Bonum';font-style:italic;font-size:677.386px;">V</text>
+            </g>
+            <g transform="matrix(0.478214,0,0,0.478214,2387.06,7375.25)">
+                <text x="6476.99px" y="6885.91px" style="font-family:'TeXGyreBonum-Regular', 'TeX Gyre Bonum';font-size:677.386px;">in</text>
+            </g>
+            <g transform="matrix(0.874723,0,0,0.874723,4528.84,4533.37)">
+                <text x="6476.99px" y="6885.91px" style="font-family:'TeXGyreBonum-Italic', 'TeX Gyre Bonum';font-style:italic;font-size:677.386px;">V</text>
+            </g>
+            <g transform="matrix(0.478214,0,0,0.478214,7422.99,7375.25)">
+                <text x="6476.99px" y="6885.91px" style="font-family:'TeXGyreBonum-Regular', 'TeX Gyre Bonum';font-size:677.386px;">C</text>
+            </g>
+            <g transform="matrix(1,0,0,1,-1782.48,978.945)">
+                <circle cx="6112.17" cy="9375.73" r="681.277" style="fill:none;stroke:black;stroke-width:69.55px;"/>
+            </g>
+            <g transform="matrix(0.832536,0,0,0.779522,-224.959,3540.39)">
+                <path d="M5470.81,8206.03L5470.81,8498.1" style="fill:none;stroke:black;stroke-width:86.24px;stroke-linecap:square;stroke-linejoin:miter;"/>
+            </g>
+            <g transform="matrix(-1.52934e-16,0.779522,-0.832536,-1.43196e-16,11283.1,5786.39)">
+                <path d="M5470.81,8206.03L5470.81,8498.1" style="fill:none;stroke:black;stroke-width:86.24px;stroke-linecap:square;stroke-linejoin:miter;"/>
+            </g>
+            <g transform="matrix(-1.52934e-16,1,-0.832536,-1.83697e-16,11283.1,5263.63)">
+                <path d="M5470.81,8206.03L5470.81,8498.1" style="fill:none;stroke:black;stroke-width:75.59px;stroke-linecap:square;stroke-linejoin:miter;"/>
+            </g>
+            <g>
+                <g transform="matrix(0.810776,0,0,0.776248,-105.915,3483.69)">
+                    <path d="M5470.81,7973.87L5470.81,7107.31L7367.62,7107.31" style="fill:none;stroke:black;stroke-width:87.62px;stroke-linecap:square;stroke-linejoin:miter;"/>
+                </g>
+                <g transform="matrix(2.87101,2.52306e-16,-2.41561e-16,-0.776248,-11377.1,17225.8)">
+                    <path d="M5470.81,7973.87L5470.81,7107.31" style="fill:none;stroke:black;stroke-width:33.07px;stroke-linecap:square;stroke-linejoin:miter;"/>
+                </g>
+                <g transform="matrix(1,0,0,1.00046,2186.67,-4.18441)">
+                    <path d="M5951.41,9000.73L5951.41,10244.1" style="fill:none;stroke:black;stroke-width:69.57px;stroke-linecap:square;stroke-linejoin:miter;"/>
+                </g>
+                <g transform="matrix(1,0,0,1,2186.67,0)">
+                    <path d="M5951.41,11709L5951.41,10465.1" style="fill:none;stroke:black;stroke-width:69.58px;stroke-linecap:square;stroke-linejoin:miter;"/>
+                </g>
+            </g>
+            <g transform="matrix(1.09745,0,0,1,1538.59,129.384)">
+                <path d="M5656.35,10115.2L6370.59,10115.2" style="fill:none;stroke:black;stroke-width:88.19px;stroke-linecap:butt;"/>
+            </g>
+            <g transform="matrix(1.09745,0,0,1,1538.59,349.867)">
+                <path d="M5656.35,10115.2L6370.59,10115.2" style="fill:none;stroke:black;stroke-width:88.19px;stroke-linecap:butt;"/>
+            </g>
+        </g>
+        <g id="Resistor" transform="matrix(1.06386,0,-1.2326e-32,1.57265,1608.37,175.055)">
+            <path d="M2343.16,6886.01L2444.75,6748.09L2577.12,7021.65L2733.42,6736.37L2883.86,7021.65L3021.11,6733.93L3166.28,7021.65L3269.78,6868.86" style="fill:none;stroke:black;stroke-width:68.96px;stroke-linecap:butt;stroke-linejoin:miter;"/>
+        </g>
+        <g transform="matrix(1,0,0,1,234.193,-242.848)">
+            <circle cx="7901.18" cy="11234.3" r="117.097" style="fill:none;stroke:black;stroke-width:69.55px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:1;"/>
+        </g>
+        <g transform="matrix(1,0,0,1,234.193,2465.43)">
+            <circle cx="7901.18" cy="11234.3" r="117.097" style="fill:none;stroke:black;stroke-width:69.55px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:1;"/>
+        </g>
+        <g transform="matrix(0.874723,0,0,0.874723,-1295.8,4618.14)">
+            <text x="6476.99px" y="6885.91px" style="font-family:'TeXGyreBonum-Italic', 'TeX Gyre Bonum';font-style:italic;font-size:677.386px;">R</text>
+        </g>
+        <g transform="matrix(1,-0,-0,1,1856.49,10237.9)">
+            <path d="M6174.57,1409.02L6278.89,1096.06L6383.21,1409.02L6174.57,1409.02Z"/>
+            <path d="M6278.89,3125.24L6278.89,1346.43" style="fill:none;stroke:black;stroke-width:69.55px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:1;"/>
+        </g>
+        <path d="M5080.91,10991.4L8018.28,10991.4" style="fill:none;stroke:black;stroke-width:69.55px;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:1;"/>
+        <path d="M2572.54,13699.5L8018.28,13699.5" style="fill:none;stroke:black;stroke-width:69.55px;stroke-linecap:square;stroke-linejoin:bevel;stroke-miterlimit:1;"/>
+    </g>
+</svg>
