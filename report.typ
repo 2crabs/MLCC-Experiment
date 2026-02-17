@@ -233,7 +233,7 @@ $ V_C =  V_"in" - I R $
 
 And finally using the equation for a capacitor from @C to replace $I$:
 
-$ V_C = V_"in" - R C (d V) / (d t) $
+$ V_C = V_"in" - R C (d V) / (d t) $<baseRC>
 
 The equation in this form is not very helpful because it not possible to easily input a time and get an output voltage. Because of this, the equation is almost always manipulated into the RC formula, shown below. This process is explained in @RCderiv.
 
@@ -261,9 +261,9 @@ $ integral_0^(t) (d t)/(R C) = integral_0^(V_C) (-d V_C) / (V_C - V_"in") $
 $ t/(R C) = -ln(V_C - V_"in") - ln(-V_"in") $
 #simpleMathNote([Combine logarithms], 10pt, 10pt)
 $ t/(R C) = -ln((V_C - V_"in")/(-V_"in")) $
-#mathNote([Combine ln], 10pt, 10pt)
+#mathNote([$dot (- 1)$], 10pt, 10pt)
 $ -t/(R C) = ln((V_C - V_"in")/(-V_"in")) $
-#mathNote([Combine ln], 10pt, 10pt)
+#simpleMathNote([Logarithm rules], 10pt, 10pt)
 $ e^(-t/(R C)) = (V_C - V_"in")/(-V_"in") $
 #simpleMathNote([$dot (-V_"in")$], 10pt, 10pt)
 $ -V_"in" dot e^(-t/(R C)) = V_C - V_"in" $
@@ -273,7 +273,7 @@ $ V_"in" - V_"in" dot e^(-t/(R C)) = V_C $
 $ V_"in" (1 - e^(-t/(R C))) = V_C $
 #set block(spacing: 1.6em)
 
-= Experiment
+= Experiment<experimentSection>
 
 == Overview
 An experiment as a method of finding electrical behavior is the costliest and most time consuming. If the appropriate component needs to be chosen from a large selection, than buying and testing them all is unrealistic.
@@ -307,7 +307,7 @@ As expected, the voltage rises faster than an ideal 22$mu"F"$ capacitor. A compa
       lq.plot(
         Time-MSO, Out-MSO.map(x => (x - 0.15) * 1.031),
         mark: none,
-        label: [Actual]
+        label: [Experiment]
       ),
       xlabel: [Time (s)],
       ylabel: [$V_"out"$],
@@ -318,11 +318,11 @@ As expected, the voltage rises faster than an ideal 22$mu"F"$ capacitor. A compa
   caption: [Caption],
 )<exp1>
 
-Using this graph we are able to to try to find a capacitor of a lower value that is more accurate to the curve. Using as point on the curve, a capacitor that will have an equivalent amount of rise time to get to that point can be calculated using the RC formula. Here a point of (0.03669s, 4.511V) was chosen and the values of $t = 0.03669"s"$ and $V = 4.511"V"$ were substituted into the formula shown below.
+Using this graph we are able to to try to find a capacitor of a lower value that is more consistent with the experimental results. Using a point on the curve, a capacitor that takes an equivalent amount of time to get to that point can be calculated using the RC formula. Here a point of (0.03669s, 4.511V) was chosen and the values of $t = 0.03669"s"$ and $V = 4.511"V"$ were substituted into @eqRC as shown below.
 
 $ 4.511"V" = 5V dot (1 - e^((-0.03669"s")/(1000Omega dot C))) $
 
-Solving for $C$ yielded result of $C approx 16mu"F"$. The curve from this value of capacitor is plotted in @16u.
+Solving for $C$ yielded a result of $C approx 16mu"F"$. The curve from this value of capacitor is plotted in @16u.
 
 #figure(
   block(
@@ -335,7 +335,7 @@ Solving for $C$ yielded result of $C approx 16mu"F"$. The curve from this value 
       lq.plot(
         Time-MSO, Out-MSO.map(x => (x - 0.15) * 1.031),
         mark: none,
-        label: [Actual]
+        label: [Experiment]
       ),
       xlabel: [Time (s)],
       ylabel: [$V_"out"$],
@@ -356,7 +356,7 @@ The speed of modern computing has made simulation in a variety of situations use
 == Implementation<SimImplementation>
 The charging of the capacitor can be broken into small time steps where each time step has value of $t_"step"$. This will act as a replacement to $d t$. Each $t_"step"$, the voltage across the capacitor, $V$, will increase by a calculated amount. Using this, a sequence of voltage values can be obtained, $ V_0, V_1, V_2,... , V_"# of steps"$. Each $V_n$ corresponds to a time of $t_"step" dot n$.
 
-To find the change in voltage each time step, the equation $I = C (d V) / (d t)$ is manipulated to isolate the change in voltage. This yields $d V = I* (d t)/C$. Current is calculated using ohm's law to get $I = (V_"in"-V_n)/R$. Using these equations we get the following sequence.
+To find the change in voltage each time step, the equation $I = C (d V) / (d t)$ is manipulated to isolate the change in voltage. This yields $d V = I dot (d t)/C$. Current is calculated using ohm's law to get $I = (V_"in"-V_n)/R$. Using these equations we get the following sequence.
 
 $ V_0 = 0V $
 $ V_(n+1) = V_n + (V_"in"-V_n)/R dot (t_"step")/C $<eqSequence>
@@ -406,15 +406,23 @@ By using this method, the capacitance can easily be changed to be any arbitrary 
 $ V_0 = 0V $
 $ V_(n+1) = V_n + (V_"in"-V_n)/R dot (t_"step")/C(V_n) $
 
-Using the DC Bias curve from the manufacturer, the same from @C, we can use a linear function to approximate the capacitance based on voltage. The approximation chosen was
-$ C(V) = 22mu"F" - (2.33mu"F" dot V) $<eqApprox>
-This approximation is shown in @approx compared to the manufacturer.
+#let Cadjusted = C.map(x => x*10.0)
+//#let approx1_C1 = calc.round(Cadjusted.first(), digits: 2)
+#let approx1_C1 = 22
+#let approx1_C2 = calc.round((Cadjusted.last() - approx1_C1)/V.last(), digits: 2)
+#let approx1_C2 = 2.29
+
+Using the DC Bias curve from the manufacturer, the same from @C, we can use a function to approximate the capacitance based on voltage. The function used was created to linearly decrease from the rated capacitance at $V = 0$ to the end of the DC bias curve. That is, the function intersects (0V, $22 mu"F"$) and ($6.3"V", #calc.round(Cadjusted.last(), digits: 2) mu"F"$). This function is shown below:
+
+$ C(V) = #approx1_C1 mu"F" - (#approx1_C2 mu"F" dot V) $<eqApprox>
+
+This linear approximation is shown in @approx compared to the curve provided by the manufacturer.
 
 #figure(
   block(
     lq.diagram(
       lq.plot(
-        (0,6), (22, 6),
+        (0, V.last()), (approx1_C1, Cadjusted.first() + (V.last() * -approx1_C2)),
         mark: none,
         label: [Approximation],
         z-index: 3
@@ -435,7 +443,7 @@ This approximation is shown in @approx compared to the manufacturer.
 Using this approximation, the sequence becomes
 
 $ V_0 = 0V $
-$ V_(n+1) = V_n + (V_"in"-V_n)/R dot (t_"step")/(22mu"F" - 2.33mu"F" dot V_n) $
+$ V_(n+1) = V_n + (V_"in"-V_n)/R dot (t_"step")/(#approx1_C1 mu"F" - #approx1_C2 mu"F" dot V_n) $
 
 == Results
 
@@ -452,7 +460,7 @@ $ V_(n+1) = V_n + (V_"in"-V_n)/R dot (t_"step")/(22mu"F" - 2.33mu"F" dot V_n) $
       lq.plot(
         Time-MSO, Out-MSO.map(x => (x - 0.15) * 1.031),
         mark: none,
-        label: [Actual]
+        label: [Experiment]
       ),   
       xlabel: [Time (s)],
       ylabel: [$V_C$],
@@ -463,29 +471,32 @@ $ V_(n+1) = V_n + (V_"in"-V_n)/R dot (t_"step")/(22mu"F" - 2.33mu"F" dot V_n) $
   caption: [Simulation versus actual]
 )<sim2>
 
-Using this approximation, a simulation is run using 200 time steps across a 100ms period, $t_"step" = 500mu s$. The curve obtained is compared with the actual curve in @sim2.
+Using this approximation, a simulation is run using 200 time steps across a 100ms period, that is $t_"step" = 500mu s$. In @sim2, curve obtained is compared with the curve obtained from an experiment in @experimentSection.
 
-This appears to be much closer to the actual capacitor than what would be predicted for a 22$mu"F"$ capacitor.
+This appears to be much closer to the actual capacitor than what would be predicted for an ideal 22$mu"F"$ capacitor.
 
 = Deriving New Formula <math>
 
 == Overview
-In this section we will attempt to derive a formula for the same method used in the second part of the previous section
-== Derivation
-In @SimImplementation, the approximation $C(V) = 22mu"F" - (2.33mu"F" dot V)$ was used. We will continue to use a linear approximation but transfer to an equation form with arbitrary values. $22mu"F"$ and and $-2.3mu"F"$ are replaced with with $C_1$ and $C_2$ respectively. Thus the new formula is $C(V) = C_1 - C_2 dot V$. This formula replaces the constant $C$.
+In this section we will attempt to derive a formula for the same method used in the second part of the previous section.
+
+In @SimImplementation, the approximation $C(V) = #approx1_C1 mu"F" - (#approx1_C2 mu"F" dot V)$ was used. We will continue to use a linear approximation but transfer to an equation form with arbitrary values. $#approx1_C1 mu"F"$ and $ #approx1_C2 mu"F"$ are replaced with $C_1$ and $C_2$ respectively. Thus the new formula is:
+$ C(V) = C_1 - C_2 dot V $<eqFuncOfC>
+This formula replaces the constant $C$ in @baseRC.
 
 $ V_C = V_"in" - R (C_1 - C_2 dot V_C) (d V_C) / (d t) $
+== Results
 
-Using the derivation shown in @appB the following formula is found.
+
+Using the derivation shown in @appB the following equation is found.
 
 $ V_"in" (1-e^((C_2 V_C - t/R)/(C_1 - C_2 V_"in"))) = V_C $
 
-Due to the output voltage being both inside and outside the exponent it is difficult to isolate $V_C$, though time can be found based on time. This is out of the scope of this paper. The formula where time is isolated is shown below.
+Due to the term $C_2 V_C$ being inside of the exponent, $V_C$ is difficult to isolate and out of the scope of this paper. Despite this, time can be found based on voltage. The formula where time is isolated is shown below.
 
-$ t =   R C_2 V_c - (R) (C_1 - C_2 V_"in")(ln((V_"in" - V_C)/V_"in")) $
+$ t =   R C_2 V_C - (R) (C_1 - C_2 V_"in")(ln((V_"in" - V_C)/V_"in")) $
 
-This formula is conveniet for getting a time at a specified voltage, which relates to the enable pin as referenced in @C. We can generate a series of value 0, 1, 2, 3, .., 99. eachvalue is divided by 20 to get 0, 0.05, 0.1, 0.15 ..., 4.95.
-== Results
+By calculating $t$ Using a large number of values of $V_C$ in our range of $0V <= V_C < V_"in"$ we are able to to obtain a curve. Using $C_1 = #approx1_C1 mu"F"$ and $C_2 = #approx1_C2 mu"F"$, a curve is obtained using this method and plotted in @NewFormula
 
 #let vDeriv = (0.1, 1.0 ,2.0 ,3.0 ,4.0, 4.5 ,4.9, 4.99)
 #let vRange = lq.linspace(0, 199).map(x => x/40)
@@ -496,7 +507,7 @@ This formula is conveniet for getting a time at a specified voltage, which relat
       lq.plot(
         Time-MSO, Out-MSO.map(x => (x - 0.15) * 1.031),
         mark: none,
-        label: [Actual]
+        label: [Experiment]
       ),
       lq.plot(
         x43, x43.map(x => (RCFormula(5, 1000, 0.000022, x))),
@@ -505,7 +516,7 @@ This formula is conveniet for getting a time at a specified voltage, which relat
         z-index: 1
       ),
       lq.plot(
-        vDeriv.map(x => (modifiedRCFormula(x, 5, 1000, 0.000022, 0.00000233))), vDeriv,
+        vDeriv.map(x => (modifiedRCFormula(x, 5, 1000, 0.000022, 0.00000229))), vDeriv,
         mark: none,
         label: [New formula],
         z-index: 1
@@ -517,28 +528,275 @@ This formula is conveniet for getting a time at a specified voltage, which relat
     inset: (right: 20pt, bottom: 4pt)
   ),
   caption: [Caption]
-)
+)<NewFormula>
 
-The result of this formula is plotted. As expected, the results of using this formula are functionally identical to the simulation.
+As expected, the results of using this formula are functionally identical to the simulation and when compared to the original RC formula, the results are far more accurate
 
 
 = Generalization
+== Factors
 
-Up to this point, only one value of capacitor has been analyzed, but the aim of this paper is to be able to accurately predict the behavior of any MLCC capacitor. To do this, the values of $C_1$ and $C_2$ in equation something must be able to be generated based on characteristics of a capacitor. The two main factors influencing multi-layer ceramic capaicitors are there size and and their classification.
+Up to this point, only one capacitor has been analyzed, but the aim of this paper is to be able to accurately predict the behavior of different MLCCs. To do this, the values of $C_1$ and $C_2$ in @eqFuncOfC must be able to be generated based on characteristics of a capacitor.
 
-Compare capacitance vs. voltage of different types of capacitors (x5r, x7r, 0805, 0603)
+Multi-layer ceramic capacitors have many characteristics but the most important are:
 
-Try to find a general formula that can fit the DC bias curves.
+- Capacitance
+- Package size (eg. 1206, 0805, 0603)
+- Maximum voltage
+- Temperature coefficient
+
+In this paper only 0805 X5R capacitors will be examined due to being one of the most used package sizes and temperature coefficients.
+#let (vmax_V1, vmax_C1, vmax_dif1) = lq.load-txt(read("data/4u76v3S.csv"))
+#let (vmax_V2, vmax_C2, vmax_dif2) = lq.load-txt(read("data/4u710vS.csv"))
+#let (vmax_V3, vmax_C3, vmax_dif3) = lq.load-txt(read("data/4u716vS.csv"))
+#let (vmax_V4, vmax_C4, vmax_dif4) = lq.load-txt(read("data/4u725vS.csv"))
+
+#figure(
+  block(
+    lq.diagram(
+      lq.plot(
+        vmax_V4, vmax_C4,
+        mark: none,
+        label: [25V]
+      ),
+      lq.plot(
+        vmax_V3, vmax_C3,
+        mark: none,
+        label: [16V]
+      ),
+      lq.plot(
+        vmax_V2, vmax_C2,
+        mark: none,
+        label: [10V]
+      ),
+      lq.plot(
+        vmax_V1, vmax_C1,
+        mark: none,
+        label: [6.3V]
+      ),
+      xlabel: [DC Bias (V)],
+      ylabel: [Capacitance ($mu"F"$)]
+    ),
+    inset: (right: 20pt, bottom: 4pt)
+  ),
+  caption: [DC bias of different $V_"max"$]
+)<vmax>
+
+This leaves capacitance and maximum voltage under consideration as factors playing a role in the DC bias characteristics of a capacitor. The second of these. maximum voltage, has a relatively small effect on DC bias as shown in @vmax. The capacitance, on the other hand, will have a very pronounced effect on DC bias. Small value MLCCs will have a relatively small change in capacitance across their full voltage range. A 0.5$mu"F"$ capacitor may only change by few percent of its rated capacitance, while a 50$mu"F"$ capacitor lose 80%. This effect is shown in @PercentChange.
+
+#let (cap_V1, cap_C1, cap_dif1) = lq.load-txt(read("data/1u16vS.csv"))
+#let (cap_V2, cap_C2, cap_dif2) = lq.load-txt(read("data/2u216vS.csv"))
+#let (cap_V3, cap_C3, cap_dif3) = lq.load-txt(read("data/4u716vS2.csv"))
+#let (cap_V4, cap_C4, cap_dif4) = lq.load-txt(read("data/10u16vS.csv"))
+
+#let sliceSize = 59
+
+#let cap_V1 = cap_V1.slice(0,sliceSize)
+#let cap_C1 = cap_C1.slice(0,sliceSize)
+#let cap_dif1 = cap_dif1.slice(0,sliceSize)
+
+#let cap_V2 = cap_V2.slice(0,sliceSize)
+#let cap_C2 = cap_C2.slice(0,sliceSize)
+#let cap_dif2 = cap_dif2.slice(0,sliceSize)
+
+#let cap_V3 = cap_V3.slice(0,sliceSize)
+#let cap_C3 = cap_C3.slice(0,sliceSize)
+#let cap_dif3 = cap_dif3.slice(0,sliceSize)
+
+#let cap_V4 = cap_V4.slice(0,sliceSize)
+#let cap_C4 = cap_C4.slice(0,sliceSize)
+#let cap_dif4 = cap_dif4.slice(0,sliceSize)
+
+// 
+
+#figure(
+  block(
+    lq.diagram(
+      lq.plot(
+        cap_V4, cap_dif4,
+        mark: none,
+        label: [10$mu"F"$]
+      ),
+      lq.plot(
+        cap_V3, cap_dif3,
+        mark: none,
+        label: [4.7$mu"F"$]
+      ),
+      lq.plot(
+        cap_V2, cap_dif2,
+        mark: none,
+        label: [2.2$mu"F"$]
+      ),
+      lq.plot(
+        cap_V1, cap_dif1,
+        mark: none,
+        label: [1$mu"F"$]
+      ),
+      xlabel: [DC Bias (V)],
+      ylabel: [Percentage Change ($%$)],
+      legend: (position: bottom + left)
+    ),
+    inset: (right: 20pt, bottom: 4pt)
+  ),
+  caption: [DC Bias of varying capcacitances]
+)<PercentChange>
+
+== Approximation
+Using two points, like in @sim, a linear approximation can be constructed for each of the DC bias curves. The first point is (0V, Rated Capacitance) and the second is (6V, C(6V)). The line formed between these two points is shown in @approxGeneral.
+
+#figure(
+  block(
+    lq.diagram(
+      lq.plot(
+        cap_V4, cap_C4,
+        mark: none,
+        stroke: (paint: lq.color.map.petroff10.at(0).transparentize(50%))
+      ),
+      lq.plot(
+        cap_V3, cap_C3,
+        mark: none,
+        stroke: (paint: lq.color.map.petroff10.at(1).transparentize(50%))
+      ),
+      lq.plot(
+        cap_V2, cap_C2,
+        mark: none,
+        stroke: (paint: lq.color.map.petroff10.at(2).transparentize(50%))
+      ),
+      lq.plot(
+        cap_V1, cap_C1,
+        mark: none,
+        stroke: (paint: lq.color.map.petroff10.at(3).transparentize(50%))
+      ),
+      lq.plot(
+        (0, cap_V4.last()), (10, cap_C4.last()),
+        mark: none,
+        label: [10$mu"F"$],
+        stroke: (paint: lq.color.map.petroff10.at(0))
+      ),
+      lq.plot(
+        (0, cap_V3.last()), (4.7, cap_C3.last()),
+        mark: none,
+        label: [4.7$mu"F"$],
+        stroke: (paint: lq.color.map.petroff10.at(1))
+      ),
+      lq.plot(
+        (0, cap_V2.last()), (2.2, cap_C2.last()),
+        mark: none,
+        label: [2.2$mu"F"$],
+        stroke: (paint: lq.color.map.petroff10.at(2))
+      ),
+      lq.plot(
+        (0, cap_V1.last()), (1, cap_C1.last()),
+        mark: none,
+        label: [1$mu"F"$],
+        stroke: (paint: lq.color.map.petroff10.at(3))
+      ),
+      xlabel: [DC Bias (V)],
+      ylabel: [Capacitance ($mu"F"$)]
+    ),
+    inset: (right: 20pt, bottom: 4pt)
+  ),
+  caption: [DC Bias of varying capcacitances]
+)<approxGeneral>
+
+The slope of each approximation can be found using $(d C)/(D V)$. Using the two points this becomes: $ "Slope" = (C(6V) - "Rated Capacitance") / (6V-0V) $
+The slopes of each approximation are plotted in @slopeC. From this, a function to predict the slope of the linear approximation for DC bias can be created. This function was chosen as $f(C) = 0.19 - 0.155C$.
+
+#let slopeApprox(x) = (
+  x*-0.155 + 0.19
+)
+
+#let capacitances = (10, 4.7, 2.2, 1)
+#let slope = (
+  (cap_C4.last() - 10)/5,
+  (cap_C3.last() - 4.7)/5,
+  (cap_C2.last() - 2.2)/5,
+  (cap_C1.last() - 1)/5
+)
+#let intercept = (
+  cap_C4.first()/10,
+  cap_C3.first()/4.7,
+  cap_C2.first()/2.2,
+  cap_C1.first()
+)
+#let colorsSlope = (
+  lq.color.map.petroff10.at(0),
+  lq.color.map.petroff10.at(1),
+  lq.color.map.petroff10.at(2),
+  lq.color.map.petroff10.at(3)
+)
+
+//#let capacitances = capacitances.map(x => calc.ln(x))
+
+#figure(
+  block(
+    lq.diagram(
+      lq.plot(
+        (0, 10), (slopeApprox(0), slopeApprox(10)),
+        mark: none,
+        stroke: (paint: lq.color.map.petroff10.at(4)),
+        label: [$f(C)$]
+      ),
+      lq.scatter(
+        capacitances, slope,
+        size: 5pt,
+        mark: "s",
+        color: colorsSlope
+      ),
+      xlabel: [Capacitance ($mu"F"$)],
+      ylabel: [Slope ($mu"F" V^(-1)$)]
+    ),
+    inset: (right: 20pt, bottom: 4pt)
+  ),
+  caption: [DC Bias of varying capcacitances]
+)<slopeC>
+
+#let asdfsfd = 0.19/.155
+At $f(1.23)$ this relationship breaks apart as the slope becomes positive, that is capacitance increases with voltage across a capacitor. In reality, the slope will level off to practically zero as the capacitance approaches zero. A better approximation can be created by using a power.$g(C) = -0.0352C^(8/5)$. This also solves the problem of capacitances close to zero.
+
+#let betterSlopeApprox(x) = (
+  -0.2 * 0.176 * calc.pow(x, 1.6)
+)
+
+#figure(
+  block(
+    lq.diagram(
+      lq.plot(
+        lq.linspace(0,100).map(x => x/10), lq.linspace(0,100).map(x => x/10).map(x => betterSlopeApprox(x)),
+        mark: none,
+        stroke: (paint: lq.color.map.petroff10.at(4)),
+        label: [$g(C)$]
+      ),
+      lq.scatter(
+        capacitances, slope,
+        size: 5pt,
+        mark: "s",
+        color: colorsSlope
+      ),
+      xlabel: [Capacitance ($mu"F"$)],
+      ylabel: [Slope ($mu"F" V^(-1)$)]
+    ),
+    inset: (right: 20pt, bottom: 4pt)
+  ),
+  caption: [DC Bias of varying capcacitances]
+)<slopeCbetter>
+
+Using the rated capacitance as the y-intercept, $C_1$, and the above equation as the slope, $C_2$ we find, that in general a 0805 X5R MlCC's DC bias can be approximated with the linear formula shown in @eqFinal.
 
 
+$ C - 0.0352C^(8/5) $<eqFinal>
+
+Combined with the equations derived in @math it is possible to more accurately the time it will take for a MLCC used in an RC circuit to rise to a given voltage level.
 = Comparison of Methods
-The Simulation and derivation are likely very similar in results. They appear based on the experiment to better than a constant capacitance at either end ($V_"max"$ or 0V)
+The Simulation and derivation are likely very similar in results. They appear based on the experiment to better than a constant capacitance at either end $C(V_"max")$ or $C(0V)$. 
 
-
-= Conclusion
-How this could be useful in my life and elsewhere
+While an approximation of dc bias can be created soley on the rated capacitance, it is far more accurate and practical to refer to the curve from the manufacturer and 
 
 Why it might not be accurate (This focused on bulk capacitors which might not be as common for enable pins due to size, Model might not be accurate because capacitance might not immediately change with dc applied across the capacitor (maybe experiment with this with different resistor values and see if C from RC stays the same))
+
+= Conclusion
+Wow, what a journey that was.
+How this could be useful in my life and elsewhere
 
 Something else?
 
@@ -615,13 +873,16 @@ This python script was used to generate data for all five simulation results sho
   title-style: (color: black),
   frame: (
     title-color: black.transparentize(95%),
-    radius: (bottom-right: 0pt, rest: 10pt)
+    radius: (bottom-right: 0pt, top-right: 0pt, rest: 10pt)
   )
 )[
   #set block(spacing: 1.5em)
-  $ (- d t) / (R (C_1-C_2 dot V_C)) = (d V)/ (V_C - V_"in") $
-  $ (- d t) / (R ) = ((C_1-C_2 V_C) dot (d V))/ (V_C - V_"in") $
-  $ colorFormula(integral_0^t (- d t) / (R ), #yellow) = colorFormula(integral_0^V_C ((C_1-C_2 V_C) dot (d V))/ (V_C - V_"in"), #blue) $
+  $ V_C = V_"in" - R (C_1 - C_2 dot V_C) (d V_C) / (d t) $
+  $ V_C - V_"in" = - R (C_1 - C_2 dot V_C) (d V_C) / (d t) $
+  $ - d t(V_C - V_"in") = R (C_1 - C_2 dot V_C) (d V_C) $
+  $ (- d t(V_C - V_"in"))/R = (C_1 - C_2 dot V_C) (d V_C) $
+  $ (- d t) / (R ) = ((C_1-C_2 V_C) dot (d V_C))/ (V_C - V_"in") $
+  $ colorFormula(integral_0^t (- d t) / (R ), #yellow) = colorFormula(integral_0^V_C ((C_1-C_2 V_C) dot (d V_C))/ (V_C - V_"in"), #blue) $
 ]
 
 #showybox(
@@ -649,9 +910,9 @@ This python script was used to generate data for all five simulation results sho
   )
 )[
   #set block(spacing: 1.5em)
-  $ integral_0^V_c (C_1-C_2 V_C)/ (V_C - V_"in") d V $
-  $ integral_0^V_c C_1/ (V_C - V_"in") + (-C_2 V_C)/ (V_C - V_"in") d V $
-  $ colorFormula(integral_0^V_c C_1/ (V_C - V_"in") d V, #green) + colorFormula(integral_0^V_c (-C_2 V_C)/ (V_C - V_"in") d V, #purple) $
+  $ integral_0^V_C (C_1-C_2 V_C)/ (V_C - V_"in") d V $
+  $ integral_0^V_C C_1/ (V_C - V_"in") + (-C_2 V_C)/ (V_C - V_"in") d V $
+  $ colorFormula(integral_0^V_C C_1/ (V_C - V_"in") d V, #green) + colorFormula(integral_0^V_C (-C_2 V_C)/ (V_C - V_"in") d V, #purple) $
 ]
 
 #showybox(
@@ -665,7 +926,7 @@ This python script was used to generate data for all five simulation results sho
   )
 )[
   #set block(spacing: 1.5em)
-  $ integral_0^V_c C_1/ (V_C - V_"in") d V $
+  $ integral_0^V_C C_1/ (V_C - V_"in") d V $
   $ C_1 ln(|V_C - V_"in"|) - C_1 ln(|- V_"in"|) $
   $ bold(C_1 ln(V_"in" - V_C) - C_1 ln(V_"in")) $
 ]
@@ -681,11 +942,11 @@ This python script was used to generate data for all five simulation results sho
   )
 )[
   #set block(spacing: 1.5em)
-  $ integral_0^V_c (-C_2 V_C)/ (V_C - V_"in") d V $
-  $ -C_2 integral_0^V_c V_C/ (V_C - V_"in") d V $
-  $ -C_2 integral_0^V_c (V_C - V_"in")/ (V_C - V_"in") + V_"in"/ (V_C - V_"in") d V $
-  $ -C_2 integral_0^V_c 1 + V_"in"/ (V_C - V_"in") d V $
-  $ colorFormula(-C_2 integral_0^V_c 1 d V, #eqColor5) + colorFormula(-C_2 integral_0^V_c V_"in"/ (V_C - V_"in") d V, #eqColor6) $
+  $ integral_0^V_C (-C_2 V_C)/ (V_C - V_"in") d V $
+  $ -C_2 integral_0^V_C V_C/ (V_C - V_"in") d V $
+  $ -C_2 integral_0^V_C (V_C - V_"in")/ (V_C - V_"in") + V_"in"/ (V_C - V_"in") d V $
+  $ -C_2 integral_0^V_C 1 + V_"in"/ (V_C - V_"in") d V $
+  $ colorFormula(-C_2 integral_0^V_C 1 d V, #eqColor5) + colorFormula(-C_2 integral_0^V_C V_"in"/ (V_C - V_"in") d V, #eqColor6) $
 ]
 
 #showybox(
@@ -699,8 +960,8 @@ This python script was used to generate data for all five simulation results sho
   )
 )[
   #set block(spacing: 1.5em)
-  $ -C_2 integral_0^V_c 1 d V $
-  $ bold(-C_2 V_c) $
+  $ -C_2 integral_0^V_C 1 d V $
+  $ bold(-C_2 V_C) $
 ]
 
 #showybox(
@@ -714,8 +975,8 @@ This python script was used to generate data for all five simulation results sho
   )
 )[
   #set block(spacing: 1.5em)
-  $ -C_2 integral_0^V_c V_"in"/ (V_C - V_"in") d V $
-  $ -C_2 V_"in" integral_0^V_c 1 / (V_C - V_"in") d V $
+  $ -C_2 integral_0^V_C V_"in"/ (V_C - V_"in") d V $
+  $ -C_2 V_"in" integral_0^V_C 1 / (V_C - V_"in") d V $
   $ -C_2 V_"in" ln(|V_C - V_"in"|) + C_2 V_"in" ln(|- V_"in"|) $
   $ bold(-C_2 V_"in" ln(V_"in" - V_C) + C_2 V_"in" ln(V_"in")) $
 ]
@@ -729,11 +990,11 @@ This python script was used to generate data for all five simulation results sho
   )
 )[
   #set block(spacing: 1.5em)
-$ (- t) / R = C_1 ln(V_"in" - V_C) - C_1 ln(V_"in") -C_2 V_"in" ln(V_"in" - V_C) + C_2 V_"in" ln(V_"in") - C_2 V_c $
-$ (- t) / R = ln(V_"in" - V_C) (C_1 - C_2 V_"in") - ln(V_"in") (-C_1 + C_2 V_"in") - C_2 V_c $
-$ (- t) / R = ln(V_"in" - V_C) (C_1 - C_2 V_"in") + ln(V_"in") (C_1 - C_2 V_"in") - C_2 V_c $
-$ (- t) / R =  (C_1 - C_2 V_"in") (ln(V_"in" - V_C) + ln(V_"in")) - C_2 V_c $
-$ (- t) / R =  (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_c $
+$ (- t) / R = C_1 ln(V_"in" - V_C) - C_1 ln(V_"in") -C_2 V_"in" ln(V_"in" - V_C) + C_2 V_"in" ln(V_"in") - C_2 V_C $
+$ (- t) / R = ln(V_"in" - V_C) (C_1 - C_2 V_"in") - ln(V_"in") (-C_1 + C_2 V_"in") - C_2 V_C $
+$ (- t) / R = ln(V_"in" - V_C) (C_1 - C_2 V_"in") + ln(V_"in") (C_1 - C_2 V_"in") - C_2 V_C $
+$ (- t) / R =  (C_1 - C_2 V_"in") (ln(V_"in" - V_C) + ln(V_"in")) - C_2 V_C $
+$ (- t) / R =  (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_C $
 ]
 
 #showybox(
@@ -745,9 +1006,9 @@ $ (- t) / R =  (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_c $
   )
 )[
   #set block(spacing: 1.5em)
-  $ (- t) / R =  (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_c $
-  $ -t =   - R C_2 V_c + (R) (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) $
-  $ bold(t =   R C_2 V_c - (R) (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in"))) $
+  $ (- t) / R =  (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_C $
+  $ -t =   - R C_2 V_C + (R) (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) $
+  $ bold(t =   R C_2 V_C - (R) (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in"))) $
 ]
 
 
@@ -760,11 +1021,11 @@ $ (- t) / R =  (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_c $
   )
 )[
   #set block(spacing: 1.5em)
-  $ (- t) / R +  C_2 V_c = (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) $
-  $ ((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in") =   ln((V_"in" - V_C)/V_"in") $
-  $ e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in")) =   (V_"in" - V_C)/V_"in" $
-  $ V_"in"e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in")) =   V_"in" - V_C $
-  $ V_"in"e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in")) - V_"in" = - V_C $
-  $ -V_"in"e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in")) + V_"in" = V_C $
-  $ bold(V_"in" (1 - e^(((- t) / R +  C_2 V_c)/(C_1 - C_2 V_"in"))) = V_C) $
+  $ (- t) / R +  C_2 V_C = (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) $
+  $ ((- t) / R +  C_2 V_C)/(C_1 - C_2 V_"in") =   ln((V_"in" - V_C)/V_"in") $
+  $ e^(((- t) / R +  C_2 V_C)/(C_1 - C_2 V_"in")) =   (V_"in" - V_C)/V_"in" $
+  $ V_"in"e^(((- t) / R +  C_2 V_C)/(C_1 - C_2 V_"in")) =   V_"in" - V_C $
+  $ V_"in"e^(((- t) / R +  C_2 V_C)/(C_1 - C_2 V_"in")) - V_"in" = - V_C $
+  $ -V_"in"e^(((- t) / R +  C_2 V_C)/(C_1 - C_2 V_"in")) + V_"in" = V_C $
+  $ bold(V_"in" (1 - e^(((- t) / R +  C_2 V_C)/(C_1 - C_2 V_"in"))) = V_C) $
 ]

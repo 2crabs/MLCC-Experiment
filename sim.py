@@ -1,7 +1,7 @@
 
 import csv
 
-file = open("data/sim-50.csv", mode= "w", newline = "")
+file = open("data/sim.csv", mode= "w", newline = "")
 writer = csv.writer(file)
 
 #1k ohm
@@ -13,7 +13,7 @@ C = 22e-6
 
 #100ms
 end = 0.1
-steps = 50
+steps = 200
 dt = end/steps
 t = 0
 
@@ -29,10 +29,10 @@ for i in range(steps):
     I = Vr/R
 
     #Linear approximation of capacitance due to DC bias
-    C_bias = 22e-6 - (2.33e-6 * Vc)
+    C_bias = 22e-6 - (2.29e-6 * Vc)
 
     #Based on current and amount of time, increment voltage
-    dv = (I*dt)/C
+    dv = (I*dt)/C_bias
     Vc = Vc + dv
 
     #record result
