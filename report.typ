@@ -495,7 +495,7 @@ $ V_(n+1) = V_n + (V_"in"-V_n)/R dot (t_"step")/(#approx1_C1 mu"F" - #approx1_C2
 == Results
 
 
-#let (simT, simV) = lq.load-txt(read("data/sim.csv"))
+#let (simT, simV) = lq.load-txt(read("data/lambert.csv"))
 #figure(
   block(
     lq.diagram(
@@ -1068,10 +1068,6 @@ This Python script was used to generate data for all five simulation results sho
   $ bold(t =   R C_2 V_C - (R) (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in"))) $
 ]
 
-
-#show: equate.with(breakable: true, sub-numbering: true, number-mode: "line")
-#set math.equation(numbering: "(1.1)")
-
 #showybox(
   title: [Isolating $V_C$],
   title-style: (color: black),
@@ -1091,5 +1087,29 @@ This Python script was used to generate data for all five simulation results sho
 ]
 
 #set heading(supplement: [dix])
+#pagebreak()
+#set block(spacing: 1.5em)
+$ (-t)/R = (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_C $
+$ (-t)/((R) dot (C_1 - C_2 V_"in")) =  ln((V_"in" - V_C)/V_"in") - (C_2 V_C)/(C_1 - C_2 V_"in") $
+$ A = (C_2)/(C_1 - C_2 V_"in") $
+$ e^((-t)/((R) dot (C_1 - C_2 V_"in"))) =  e^(ln((V_"in" - V_C)/V_"in") - A V_C) $
 
+$ e^((-t)/((R) dot (C_1 - C_2 V_"in"))) =  e^(ln((V_"in" - V_C)/V_"in")) e^(- A V_C) $
+$ e^((-t)/((R) dot (C_1 - C_2 V_"in"))) =  ((V_"in" - V_C)/V_"in") e^(- A V_C) $
+$ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(- A V_C) $
+$ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(- A (V_"in" - V_"in" + V_C)) $
+$ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(- A (V_"in" - (V_"in" - V_C))) $
+$ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(-A V_"in" + A(V_"in" - V_C)) $
+$ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(-A V_"in")  e^(A(V_"in" - V_C)) $
+$ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" dot (1/(e^(-A V_"in"))) =  (V_"in" - V_C) e^(A(V_"in" - V_C)) $
+$ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A) =  (A)(V_"in" - V_C) e^(A(V_"in" - V_C)) $
+$ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-C_2 V_"in"))) (A) =  (A) (V_"in" - V_C) e^(A(V_"in" - V_C)) $
+
+$ W((e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A)) =  (A) (V_"in" - V_C) $
+$ W((e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A)) (1/A) = V_"in" - V_C $
+$ W((e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A)) (1/A) - V_"in" =  -V_C $
+$ V_"in" - W((e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A)) (1/A) =  V_C $
+$ V_"in" - W((e^((-t)/(R C_1 - R C_2 V_"in")))((A V_"in")/(e^(-A V_"in")))) dot (1/A) =  V_C $
+
+#pagebreak()
 #bibliography("works.bib")
