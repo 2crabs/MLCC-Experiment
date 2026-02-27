@@ -32,13 +32,11 @@ for i in range(steps):
     C_bias = 22e-6 - (2.29e-6 * Vc)
 
     #Based on current and amount of time, increment voltage
-    dv = (I*dt)/C_bias
-    Vc = Vc + dv
+    dV = (I*dt)/C_bias
+    Vc = Vc + dV
 
     #record result
     t = t + dt
     writer.writerow([t, Vc])
-
-
 
 file.close()

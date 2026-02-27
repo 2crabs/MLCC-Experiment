@@ -1,5 +1,4 @@
 //TODO
-// Enable pin (define)
 // Section 3.3 explain why it is expected
 // Reasoning for time domain on simulations
 // Clarify "DC Bias"
@@ -131,16 +130,16 @@
 
 = Introduction <intro>
 
-Opening up any modern computer will reveal hundreds of electrical components, ranging from miniscule resistors to large chips with hundreds of electrical contacts. Among these one shows up on nearly every circuit board. A Multi-Layer Ceramic Capacitor or MLCC is used in just about every circuit produced today. Both in precise high speed applications, such as on a CPU, and high power designs, like a DC-DC converter, they can make half of the components. Through their combination of ease of use in assembly, low cost, and small size, multi-layer ceramic capacitors have become an indispensable tool in circuit design.
+Opening up any modern computer will reveal hundreds of electrical components, ranging from miniscule resistors to large chips with hundreds of electrical contacts. Among these one shows up on nearly every circuit board. A Multi-Layer Ceramic Capacitor, or MLCC, is used in just about every circuit produced today. Both in precise high speed applications, such as on a CPU, and high power designs, like a DC-DC converter, they can make up half of the components. Through their combination of ease of use in assembly, low cost, and small size, multi-layer ceramic capacitors have become an indispensable tool in circuit design.
 
 #figure(
   image("imgs/mlcc_0.png"),
   caption: "MLCCs come in many shapes and sizes, with some as small as a grain of sand"
 )<sizes>
 
-Despite being mainly used in mass production of consumer products, MLCCs are simultaneously used in hobbyist designs. MLCCs nearly always come in Surface Mount packages, though hole packages exist, making them easy to solder by hand. While other types of capacitors exist, they do not offer the same characteristics @TDK. 
+Despite being mainly used in mass production of consumer products, MLCCs are simultaneously used in hobbyist designs. Though MLCCs nearly always come in Surface Mount packages, larger through-hole packages exist, making them easy to solder by hand. While other types of capacitors exist, they do not offer the same characteristics @TDK. 
 
-To see how they function inside of circuits and their purpose, it is neccessary to first understand the basic theory of how electricity flows.
+To see how they function inside of circuits and their purpose, it is necessary to first understand the basic theory of how electricity flows.
 
 == Voltage, Current, and Resistance <VIR>
  Voltage, a potential difference, causes current, the flow of electrons, through a conductor. 
@@ -150,7 +149,7 @@ To see how they function inside of circuits and their purpose, it is neccessary 
   caption: "A popular cartoon representing voltage and amperage"
 )<ohms>
 
-When a voltage difference, such as from a battery, is applied across a conductor, current is allowed to flow unrestricted through that conductor. An electrical drawing known as a schematic can be used to respresent these connections as @schematicIntro shows.
+When a voltage difference, such as from a battery, is applied across a conductor, current is allowed to flow unrestricted through that conductor. An electrical drawing, known as a schematic, can be used to represent these connections as @schematicIntro shows.
 
 #figure(
   image("imgs/short.png", height: 90pt, fit: "contain"),
@@ -180,7 +179,7 @@ As seen above knowing any two variables of this equation allows solving for the 
 == Model of Capacitor <C>
 A capacitor is a device where the current flowing through is proportional to the rate of change of voltage across the capacitor @ArtOfElectronics. That is,
 $ I = C (d V)/(d t) $<eqC>
-where $C$ is the capacitance in Farads. When a capacitor is connected to a constant current source the voltage across the capacitor will increase at a constant rate. The schematic of this situation is depicted in @schematicC. Conversely when a capacitor provides a constant current the voltage decreases at a linear rate.
+where $C$ is the capacitance in Farads. When a capacitor is connected to a constant current source the voltage across the capacitor will increase at a constant rate. The schematic of this situation is depicted in @schematicC. Conversely when a capacitor provides a constant current the voltage decreases at a constant rate.
 
 #figure(
   image("imgs/capacitor.png", height: 90pt, fit: "contain"),
@@ -189,7 +188,7 @@ where $C$ is the capacitance in Farads. When a capacitor is connected to a const
 
  Functionally, a capacitor acts similarly to a battery in that it can be charged and then discharged.
 
-This models an ideal capacitor, a capacitor that behaves exactly as mathematically modelled, but real capacitors and especially multi-layer cermaic capacitors face non-idealities which change this model. One of the most important, yet often overlooked, non-idealities in MLCCs is DC bias. DC bias causes the capacitance, $C$, to be reduced as a voltage is applied across the capacitor @OpenSource. This introduces a new curve, which is the capacitance versus DC bias curve. Manufacturers of capacitors will provide this data @Murata. An example of the DC Bias graph of a standard capacitor is shown in @bias.
+This models an ideal capacitor, a capacitor that behaves exactly as mathematically modelled, but real capacitors and especially multi-layer ceramic capacitors face non-idealities, which change this model. One of the most important, yet often overlooked, non-idealities in MLCCs is the effect of DC bias. DC bias causes the capacitance, $C$, to be reduced as a constant voltage is applied across the capacitor @OpenSource. This introduces a new curve, which is the capacitance versus DC bias curve. Manufacturers of capacitors will provide this data @Murata. An example of the DC bias graph of a standard capacitor is shown in @bias.
 
 These curves have a domain of $0<V<V_max$ due to maximum ratings and capacitors being bidirectional.
 
@@ -211,19 +210,17 @@ These curves have a domain of $0<V<V_max$ due to maximum ratings and capacitors 
   caption: [DC Bias of 22$mu"F"$ capacitor from Murata]
 )<bias>
 
-Because Capacitance is in fact a function of voltage, $C = C(V)$, a more accurate model of a capacitor is $I = C(V) (d V)/(d t)$. This is important when there is large change in voltage across the capacitor.
+Because capacitance is in fact a function of voltage, $C = C(V)$, a more accurate model of a capacitor is $I = C(V) (d V)/(d t)$. This is important when there is large change in voltage across the capacitor. This effect will be referred to as DC bias throughout this paper.
 == Research Question
 
-The effect of DC Bias is mainly used for noise suppresion applications. In these applications, because the voltage across the capacitor has a relatively small range, it is sufficient to assume $C$ as constant, functionally making the capacitor a lower value version of itself. This can not be done when a device is first turned on, and a MLCC goes from 0V to $V_"in"$, a large voltage change. During this transition the capacitor has a large range of capacitance from $C(0V)$ to $C(V_"in")$.
+The effect of DC Bias is mainly used for noise suppression applications. In these situations, because the voltage across the capacitor has a relatively small range, it is sufficient to assume $C$ as constant, functionally making the capacitor a lower-value version of itself. This cannot be done when a device is first turned on, and a MLCC goes from 0V to $V_"in"$, a large voltage change. During this transition the capacitor has a large range of capacitance from $C(0V)$ to $C(V_"in")$.
 
-Due to many systems requiring supply voltage to stabilize before a component is activated, components often will have an enable pin that will only allow the device to turn on when the voltage reachess a certain threshold. This is often achieved by using a capacitor to limit how fast the voltage on this pin rises. Meeting rigid timing requirements neccesitates knowing how quickly the voltage across a capacitor will rise. The aim of this paper is to predict the effect DC Bias has on the effective capacitance of a MLCC during large voltage changes such as those found in device turn on.
-
-
+Due to many systems requiring supply voltage to stabilize before being activated, components often will have a voltage sensing input that will only allow the device to turn on when the voltage reaches a certain threshold. This is often achieved by using a capacitor to limit how fast the voltage on this input rises. Meeting rigid timing requirements necessitates knowing how quickly the voltage across a capacitor will rise. The aim of this paper is to predict the effect DC Bias has on the effective capacitance of a MLCC during large voltage changes such as those found in device turn on.
 
 = RC Formula <RC>
 
 == Applications <RCapp>
-Creating the constant current source in @C for a capacitor can be difficult, so instead a resistor, as introduced in @VIR, can be used to limit voltage increasing across a capacitor. Resistors, similar to capacitors, are relatively cheap and come in small package sizes. Combining these two components creates a circuit often referred to as an RC Circuit. The diagram of this is shown in @RCcircuit.
+Creating the constant current source in @C for a capacitor can be difficult, so instead a resistor, as introduced in @VIR, can be used to limit voltage increasing across a capacitor. Resistors, similar to capacitors, are relatively cheap and are available in small sizes. Combining these two components creates a circuit often referred to as an RC Circuit. The diagram of this is shown in @RCcircuit.
 
 #figure(
   image("imgs/RC.png"),
@@ -234,23 +231,61 @@ $V_C$ starts at 0V and the current flows through the resistor increasing $V_C$ u
 
 The voltage across the resistor, $V_R$, and voltage across the capacitor, $V_C$, add to $V_"in"$. Using this, it is possible to mathematically model the circuit as shown below.
 
-$ V_R + V_C = V_"in" $
+$ V_C + V_R  = V_"in" $
 $ V_C = V_"in" - V_R $
 
 Using @eqOhmsLaw from @VIR for $V_R$ we get:
 
 $ V_C =  V_"in" - I R $
 
-And finally using @eqC from @C to replace $I$:
+And because current through the resistor is equivalent to current through the capacitor, we are able to use @eqC from @C to replace $I$:
 
 $ V_C = V_"in" - R C (d V) / (d t) $<baseRC>
 
-The equation in this form is not very helpful because it not possible to input a time and get an output voltage. Because of this, the equation is almost always manipulated into the RC formula, shown below. The derivation of @eqRC is explained in @RCderiv.
+The equation in this form is not very helpful because it not possible to directly input a time and get an output voltage. Because of this, the equation is almost always manipulated into the RC formula, shown below. The derivation of @eqRC is explained in @RCderiv.
 
 $ V_C (t) = V_"in" dot (1 - e^((-t)/(R C))) $<eqRC>
 
-This equation makes it easy to get the output voltage at a specific time in an RC circuit.
+This equation makes it easy to get the output voltage at a specific time in an RC circuit, but only models a circuit where $C$ is constant. Using $R = 10"k"Omega$ and $V_"in" = 5"V"$, a graph of @eqRC with varying capacitances is shown in @RCgraph. These specific values of $R$ and $V_"in"$ were chosen as they will later be used in @experimentSection.
 
+#{
+  let x43 = lq.linspace(0,100).map(x => x/1000 +0.)
+  [
+    #figure(
+      block(
+        lq.diagram(
+          lq.plot(
+            x43, x43.map(x => RCFormula(5, 1000, 0.000010, (x))),
+            mark: none,
+            label: [$C = 10mu"F"$]
+          ),
+          lq.plot(
+            x43, x43.map(x => RCFormula(5, 1000, 0.000020, (x))),
+            mark: none,
+            label: [$C = 20mu"F"$]
+          ),
+          lq.plot(
+            x43, x43.map(x => RCFormula(5, 1000, 0.000030, (x))),
+            mark: none,
+            label: [$C = 30mu"F"$]
+          ),
+          lq.plot(
+            x43, x43.map(x => RCFormula(5, 1000, 0.000040, (x))),
+            mark: none,
+            label: [$C = 40mu"F"$]
+          ),
+          xlabel: [Time (s)],
+          ylabel: [$V_"C"$],
+          legend: (position: bottom + right)
+        ),
+        inset: (right: 20pt, bottom: 4pt)
+      ),
+      caption: [RC Formula with varying capacitances],
+    )<RCgraph>
+  ]
+}
+
+As seen in @RCgraph, a lower capacitance will  result in a faster rise time. Because the effect of DC bias causes $C$ to decrease as $V_C$ increases, we are able to predict the voltage will rise faster with a multi-layer ceramic capacitor than its ideal counterpart.
 
 == Derivation <RCderiv>
 The formula in @RCapp can be derived using the following process.
@@ -277,7 +312,7 @@ $ -t/(R C) = ln((V_C - V_"in")/(-V_"in")) $
 $ e^(-t/(R C)) = (V_C - V_"in")/(-V_"in") $
 #mathNote([$dot (-V_"in")$], 10pt, 10pt)
 $ -V_"in" dot e^(-t/(R C)) = V_C - V_"in" $
-#mathNote([$dot (-1)$], 10pt, 10pt)
+#mathNote([$+ (V_"in")$], 10pt, 10pt)
 $ V_"in" - V_"in" dot e^(-t/(R C)) = V_C $
 #simpleMathNote([Common factor of $V_"in"$], 10pt, 10pt)
 $ V_"in" (1 - e^(-t/(R C))) = V_C $
@@ -286,12 +321,12 @@ $ V_"in" (1 - e^(-t/(R C))) = V_C $
 = Experiment<experimentSection>
 
 == Overview
-An experiment as a method of finding electrical behavior is the costliest and most time consuming. If the appropriate component needs to be chosen from a large selection, than buying and testing them all is unrealistic.
+As a method of finding electrical behavior, an experiment is the costliest and most time consuming. If the appropriate component needs to be chosen from a large selection, than buying and testing them all is unrealistic.
 
 Despite this shortcoming, an experiment is invaluable in that it will always provide the highest degree of accuracy to how a component will behave in the real world. Due to this, the results from this experiment will be the benchmark for the methods used in @sim and @math.
 
 == Setup
-A printed circuit board, designed for a RC circuit, was populated with a 1$"k"Omega$ resistor and a 22$mu"F"$ capacitor with a rated voltage of 6.3V. The circuit board was then held in place with exposed positive and negative wires. A power supply was set to 5V with no current limit and the negative side of the power supply and PCB were connected. A 10x oscilloscope probe with a ground spring was connected across the capacitor. Another 10x probe was connected between the two power wires. The capacitor was discharged by shorting the two ends using metal tweezers. The positive side of the power supply was then put in contact with the resistor side of the PCB and a waveform was obtained. This setup is depicted in @experiment. More details on the PCB and osciloscope used can be found in @appA.
+A printed circuit board designed for a RC circuit, shown in @appA, was populated with a 1$"k"Omega$ resistor and a 22$mu"F"$ capacitor with a rated voltage of 6.3V. The circuit board was then held in place with exposed positive and negative wires. A power supply was set to 5V with no current limit and the negative side of the power supply and PCB were connected. An oscilloscope probe with a ground spring was connected across the capacitor. Another probe was connected between the two power wires. The capacitor was discharged by shorting the two ends using metal tweezers. The positive side of the power supply was then put in contact with the resistor side of the PCB and a waveform was obtained. This setup is depicted in @experiment. More details on the PCB and oscilloscope used can be found in @appA.
 
 #figure(
   image("imgs/experiment-close.jpg"),
@@ -304,7 +339,7 @@ A printed circuit board, designed for a RC circuit, was populated with a 1$"k"Om
 #let (Time-MSO, Trig, Out-MSO, VCC-MSO) = lq.load-txt(read("data/oscilloscope_analog.csv"))
 #let x43 = lq.linspace(0,102).map(x => x/1000 +0.)
 
-As expected, the voltage rises faster than an ideal 22$mu"F"$ capacitor. A comparison is shown in @exp1 between an ideal $22mu"F"$capacitor and the real capacitor.
+As predicted in @RC, the voltage rises faster than an ideal 22$mu"F"$ capacitor. A comparison is shown in @exp1 between an ideal $22mu"F"$capacitor and the real capacitor.
 
 #figure(
   block(
@@ -330,7 +365,7 @@ As expected, the voltage rises faster than an ideal 22$mu"F"$ capacitor. A compa
 
 Using this graph we are able to to try to find a capacitor of a lower value that is more consistent with the experimental results. Using a point on the curve, a capacitor that takes an equivalent amount of time to get to that point can be calculated using the @eqRC. A point of (0.03669s, 4.511V) was chosen and the values of $t = 0.03669"s"$ and $V = 4.511"V"$ were substituted into @eqRC as shown below.
 
-$ 4.511"V" = 5V dot (1 - e^((-0.03669"s")/(1000Omega dot C))) $
+$ 4.511"V" = 5"V" dot (1 - e^((-0.03669"s")/(1000Omega dot C))) $
 
 Solving for $C$ yielded a result of $C approx 16mu"F"$. The curve from this value of capacitor is plotted in @16u.
 
@@ -356,22 +391,24 @@ Solving for $C$ yielded a result of $C approx 16mu"F"$. The curve from this valu
   caption: [Adjusted capacitance value compared to experiment]
 )<16u>
 
-The gap between the two curves shows that the original RC formula, even with an adjusted capacitance, is not sufficient for modelling DC bias.
+The gap between the two curves shows that the original RC formula, even with an adjusted capacitance, is not sufficient for modelling the effects of DC bias.
 
 = Simulation <sim>
 
 == Overview
-The speed of modern computing has made simulation in a variety of situations useful. Due to the efficiency of processing repeated operations, computer software is perfect for circuit simulation. In this section, python, a modern programming language, will be used to simulate an ideal capacitor and then a capacitor with DC bias.
+The speed of modern computing has made simulation in a variety of situations useful. Due to the efficiency of processing repeated operations, computer software is perfect for circuit simulation. In this section, Python, a modern programming language, will be used to simulate an ideal capacitor and then a capacitor with DC bias.
 
 == Implementation<SimImplementation>
 The charging of the capacitor can be broken into small time steps where each time step has value of $t_"step"$. This will act as a replacement to $d t$. Each $t_"step"$, the voltage across the capacitor, $V$, will increase by a calculated amount. Using this, a sequence of voltage values can be obtained, $ V_0, V_1, V_2,... , V_"# of steps"$. Each $V_n$ corresponds to a time of $t_"step" dot n$.
 
-To find the change in voltage each time step, the equation $I = C (d V) / (d t)$ is manipulated to isolate the change in voltage. This yields $d V = I dot (d t)/C$. Current is calculated using ohm's law to get $I = (V_"in"-V_n)/R$. Using these equations we get the following sequence.
+To find the change in voltage each time step, the equation $I = C (d V) / (d t)$ is manipulated to isolate the change in voltage. This yields $d V = I dot (d t)/C$. Current is calculated using @eqOhmsLaw to get $I = (V_"in"-V_n)/R$. Using these equations we get the following sequence.
 
 $ V_0 = 0V $
 $ V_(n+1) = V_n + (V_"in"-V_n)/R dot (t_"step")/C $<eqSequence>
 
-All simulations will have a time domain of $0 <= t < 100"ms"$. Using the desired total number of time steps, $t_"step"$ can be calculated with $t_"step" = (100"ms")/"# of steps"$. This is implemented in python with $R = 1"k"Omega$, $C = 22mu"F"$, and $V_"in" = 5V$. Code can be found in @appA. @sim1 shows the number of steps as 5, 10, 20, and 50.
+All simulations will have a time domain of $0 <= t < 100"ms"$, because the voltage across the capacitor stabilizes by $100"ms"$, as seen in @exp1. 
+
+Using the desired total number of time steps, $t_"step"$ can be calculated with $t_"step" = (100"ms")/"# of steps"$. This is implemented in Python with $R = 1"k"Omega$, $C = 22mu"F"$, and $V_"in" = 5V$. Code can be found in @appA. @sim1 shows the number of steps as 5, 10, 20, and 50.
 
 #let (sim5T, sim5V) = lq.load-txt(read("data/sim-5.csv"))
 #let (sim10T, sim10V) = lq.load-txt(read("data/sim-10.csv"))
@@ -550,10 +587,10 @@ As expected, the results of using this formula are functionally identical to the
 
 Up to this point, only one capacitor has been analyzed, but the aim of this paper is to be able to accurately predict the behavior of different MLCCs. To do this, the values of $C_1$ and $C_2$ in @eqFuncOfC must be able to be generated based on characteristics of a capacitor.
 
-Multi-layer ceramic capacitors have many characteristics but the most important are:
+Multi-layer ceramic capacitors have many characteristics, but the most important are:
 
 - Capacitance
-- Package size (eg. 1206, 0805, 0603)
+- Physical size (eg. 1206, 0805, 0603)
 - Maximum voltage
 - Temperature coefficient
 
@@ -650,7 +687,7 @@ This leaves capacitance and maximum voltage under consideration as factors playi
     ),
     inset: (right: 20pt, bottom: 4pt)
   ),
-  caption: [DC bias of varying capcacitances]
+  caption: [DC bias of varying capacitances]
 )<PercentChange>
 
 == Approximation
@@ -764,7 +801,7 @@ The slopes of each approximation are plotted in @slopeC. From this, a function t
 )<slopeC>
 
 #let asdfsfd = 0.19/.155
-At $f(1.23)$ this relationship breaks apart as the slope becomes positive, that is capacitance increases with voltage across a capacitor. In reality, the slope will level off to practically zero as the capacitance approaches zero. A better approximation can be created by using a power function. $g(C) = -0.0352C^(8/5)$. This also solves the problem of capacitances close to zero.
+At $f(1.23)$ this relationship breaks apart as the slope becomes positive, that is capacitance increases with voltage across a capacitor. In reality, the slope will level off to practically zero as the capacitance approaches zero. A better approximation can be created by using a power function. $g(C) = -0.0352C^(8/5)$ which solves the problem of capacitances close to zero.
 
 #let betterSlopeApprox(x) = (
   -0.2 * 0.176 * calc.pow(x, 1.6)
@@ -810,7 +847,7 @@ The experiment done in @experimentSection shows the importance of not relying on
 
 
 = Conclusion
-The creation of this IA did include a few unexpected turns. Originally SPICE (Simulation Program with Integrated Circuit Emphasis) was going to be used, but was replaced by the simulation written in python due to inflexibilities in the software. The results of this turned out to be quite useful.
+The creation of this IA did include a few unexpected turns. Originally SPICE (Simulation Program with Integrated Circuit Emphasis) was going to be used, but was replaced by the simulation written in Python due to inflexibilities in the software. The results of this turned out to be quite useful.
 
 In @math I did learn about the #emph[Lambert W Function], but its complexity limited its use.
 
@@ -871,7 +908,7 @@ A Saleae Logic MSO oscilloscope was used in combination with a PCBite probe and 
 )
 #pagebreak()
 #sourcefile(read("sim.py"), lang: "py")
-This python script was used to generate data for all five simulation results shown in @sim @sim1 and @sim2. The variable #emph([C]) in line 34 was changed to #emph[C_bias] or #emph[C] to change whether or not to account for DC bias.
+This Python script was used to generate data for all five simulation results shown in @sim @sim1 and @sim2. The variable #emph([C]) in line 34 was changed to #emph[C_bias] or #emph[C] to change whether or not to account for DC bias.
 
 #pagebreak()
 = Derivations <appB>
