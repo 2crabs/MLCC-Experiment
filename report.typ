@@ -936,7 +936,7 @@ This Python script was used to generate data for all five simulation results sho
       columns: 1,
       stroke: none,
       inset: (right: right, left: left),
-      text(size: 9pt, fill: rgb("#bebebe"))[#body]
+      text(size: 9pt, fill: rgb("#c7c7c7"))[#body]
     )
     
   ]
@@ -954,15 +954,15 @@ This Python script was used to generate data for all five simulation results sho
 )[
   #set block(spacing: 0.7em)
   $ V_C = V_"in" - R (C_1 - C_2 dot V_C) (d V_C) / (d t) $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Both sides $ - (V_"in")$], 0pt, 0pt)
   $ V_C - V_"in" = - R (C_1 - C_2 dot V_C) (d V_C) / (d t) $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Both sides $ dot (-d t)$], 0pt, 0pt)
   $ - d t(V_C - V_"in") = R (C_1 - C_2 dot V_C) (d V_C) $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Both sides $ div (R)$], 0pt, 0pt)
   $ (- d t(V_C - V_"in"))/R = (C_1 - C_2 dot V_C) (d V_C) $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Both sides $ div (V_C - V_"in")$], 0pt, 0pt)
   $ (- d t) / (R ) = ((C_1-C_2 V_C) dot (d V_C))/ (V_C - V_"in") $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Take integral], 0pt, 0pt)
   $ colorFormula(integral_0^t (- d t) / (R ), #yellow) = colorFormula(integral_0^V_C ((C_1-C_2 V_C) dot (d V_C))/ (V_C - V_"in"), #blue) $
 ]
 
@@ -977,7 +977,7 @@ This Python script was used to generate data for all five simulation results sho
 )[
   #set block(spacing: 0.7em)
   $ integral_0^t ((- d t) / (R)) $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Integrate], 0pt, 0pt)
   $ bold(- t / R) $
 ]
 
@@ -993,9 +993,9 @@ This Python script was used to generate data for all five simulation results sho
 )[
   #set block(spacing: 0.7em)
   $ integral_0^V_C (C_1-C_2 V_C)/ (V_C - V_"in") d V_C $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Separate into two fractions], 0pt, 0pt)
   $ integral_0^V_C C_1/ (V_C - V_"in") + (-C_2 V_C)/ (V_C - V_"in") d V_C $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Split into two integrals], 0pt, 0pt)
   $ colorFormula(integral_0^V_C C_1/ (V_C - V_"in") d V_C, #green) + colorFormula(integral_0^V_C (-C_2 V_C)/ (V_C - V_"in") d V_C, #purple) $
 ]
 #align(right)[
@@ -1019,9 +1019,9 @@ This Python script was used to generate data for all five simulation results sho
 )[
   #set block(spacing: 0.7em)
   $ integral_0^V_C C_1/ (V_C - V_"in") d V_C $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Integrate], 0pt, 0pt)
   $ C_1 ln(|V_C - V_"in"|) - C_1 ln(|- V_"in"|) $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Rearrange absolute values ($V_C "always"< V_"in"$)], 0pt, 0pt)
   $ bold(C_1 ln(V_"in" - V_C) - C_1 ln(V_"in")) $
 ]
 
@@ -1037,13 +1037,13 @@ This Python script was used to generate data for all five simulation results sho
 )[
   #set block(spacing: 0.7em)
   $ integral_0^V_C (-C_2 V_C)/ (V_C - V_"in") d V_C $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Move $C_2$ outside integral], 0pt, 0pt)
   $ -C_2 integral_0^V_C V_C/ (V_C - V_"in") d V_C $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Split into two fractions ($V_C = V_C - V_"in" + V_"in"$)], 0pt, 0pt)
   $ -C_2 integral_0^V_C (V_C - V_"in")/ (V_C - V_"in") + V_"in"/ (V_C - V_"in") d V_C $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Simplify fraction], 0pt, 0pt)
   $ -C_2 integral_0^V_C 1 + V_"in"/ (V_C - V_"in") d V_C $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Split into two integrals], 0pt, 0pt)
   $ colorFormula(-C_2 integral_0^V_C 1 d V_C, #eqColor5) + colorFormula(-C_2 integral_0^V_C V_"in"/ (V_C - V_"in") d V_C, #eqColor6) $
 ]
 
@@ -1060,7 +1060,7 @@ This Python script was used to generate data for all five simulation results sho
 )[
   #set block(spacing: 0.7em)
   $ -C_2 integral_0^V_C 1 d V_C $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Integrate], 0pt, 0pt)
   $ bold(-C_2 V_C) $
 ]
 
@@ -1085,11 +1085,11 @@ This Python script was used to generate data for all five simulation results sho
 )[
   #set block(spacing: 0.7em)
   $ -C_2 integral_0^V_C V_"in"/ (V_C - V_"in") d V_C $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Move $V_"in"$ outside integral], 0pt, 0pt)
   $ -C_2 V_"in" integral_0^V_C 1 / (V_C - V_"in") d V_C $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Integrate and evaluate from 0 to $V_C$], 0pt, 0pt)
   $ -C_2 V_"in" ln(|V_C - V_"in"|) + C_2 V_"in" ln(|- V_"in"|) $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Rearrange absolute values], 0pt, 0pt)
   $ bold(-C_2 V_"in" ln(V_"in" - V_C) + C_2 V_"in" ln(V_"in")) $
 ]
 
@@ -1105,13 +1105,13 @@ This Python script was used to generate data for all five simulation results sho
 )[
   #set block(spacing: 0.7em)
   $ (- t) / R = C_1 ln(V_"in" - V_C) - C_1 ln(V_"in") -C_2 V_"in" ln(V_"in" - V_C) + C_2 V_"in" ln(V_"in") - C_2 V_C $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ (- t) / R = ln(V_"in" - V_C) (C_1 - C_2 V_"in") - ln(V_"in") (-C_1 + C_2 V_"in") - C_2 V_C $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ (- t) / R = ln(V_"in" - V_C) (C_1 - C_2 V_"in") + ln(V_"in") (C_1 - C_2 V_"in") - C_2 V_C $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ (- t) / R = (C_1 - C_2 V_"in") (ln(V_"in" - V_C) + ln(V_"in")) - C_2 V_C $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Add terms with same logarithm], 0pt, 0pt)
+  $ (- t) / R = ln(V_"in" - V_C) (C_1 - C_2 V_"in") + ln(V_"in") (-C_1 + C_2 V_"in") - C_2 V_C $
+  #simpleMathNote([Move $-1$ out of $-C_1 + C_2 V_"in"$], 0pt, 0pt)
+  $ (- t) / R = ln(V_"in" - V_C) (C_1 - C_2 V_"in") - ln(V_"in") (C_1 - C_2 V_"in") - C_2 V_C $
+  #simpleMathNote([Combine terms with $(C_1 - C_2 V_"in")$], 0pt, 0pt)
+  $ (- t) / R = (C_1 - C_2 V_"in") (ln(V_"in" - V_C) - ln(V_"in")) - C_2 V_C $
+  #simpleMathNote([Combine logarithms using properties of logarithms], 0pt, 0pt)
   $ bold( (- t) / R = (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_C) $
 ]
 
@@ -1160,32 +1160,34 @@ This Python script was used to generate data for all five simulation results sho
     radius: 10pt
   )
 )[
-  #set block(spacing: 0.7em)
+  #set block(spacing: 0.5em)
   $ (-t)/R = (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_C $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  #simpleMathNote([Both sides $ div (C_1-C_2 V_"in")$], 0pt, 0pt)
   $ (-t)/((R) dot (C_1 - C_2 V_"in")) =  ln((V_"in" - V_C)/V_"in") - (C_2 V_C)/(C_1 - C_2 V_"in") $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ A = (C_2)/(C_1 - C_2 V_"in") $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ e^((-t)/((R) dot (C_1 - C_2 V_"in"))) =  e^(ln((V_"in" - V_C)/V_"in") - A V_C) $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ e^((-t)/((R) dot (C_1 - C_2 V_"in"))) =  e^(ln((V_"in" - V_C)/V_"in")) e^(- A V_C) $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ e^((-t)/((R) dot (C_1 - C_2 V_"in"))) =  ((V_"in" - V_C)/V_"in") e^(- A V_C) $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(- A V_C) $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(- A (V_"in" - V_"in" + V_C)) $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(- A (V_"in" - (V_"in" - V_C))) $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(-A V_"in" + A(V_"in" - V_C)) $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(-A V_"in")  e^(A(V_"in" - V_C)) $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" dot (1/(e^(-A V_"in"))) =  (V_"in" - V_C) e^(A(V_"in" - V_C)) $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A) =  (A)(V_"in" - V_C) e^(A(V_"in" - V_C)) $
+  #simpleMathNote([...], 0pt, 0pt)
+  $ "For simplicity, let" A = 1/(C_1 - C_2 V_"in") $
+  #simpleMathNote([Replace $1/(C_1 - C_2 V_"in")$ with $A$], 0pt, 0pt)
+  $ (-t A)/(R) =  ln((V_"in" - V_C)/V_"in") - A C_2 V_C $
+  #simpleMathNote([$e$ raised to power of both sides], 0pt, 0pt)
+  $ e^((-t A)/R) =  e^(ln((V_"in" - V_C)/V_"in") - A C_2 V_C) $
+  #simpleMathNote([Separate exponent], 0pt, 0pt)
+  $ e^((-t A)/R) =  e^(ln((V_"in" - V_C)/V_"in")) e^(- A C_2 V_C) $
+  #simpleMathNote([Simplify $e^ln(...)$], 0pt, 0pt)
+  $ e^((-t A)/R) =  ((V_"in" - V_C)/V_"in") e^(- A C_2 V_C) $
+  #simpleMathNote([Both sides $ dot (V_"in")$], 0pt, 0pt)
+  $ (e^((-t A)/R)) dot V_"in" =  (V_"in" - V_C) e^(- A C_2 V_C) $
+  #simpleMathNote([Manipulate exponent ($ V_C = V_"in" - V_"in" + V_C$)], 0pt, 0pt)
+  $ (e^((-t A)/R)) dot V_"in" =  (V_"in" - V_C) e^(- A C_2 (V_"in" - V_"in" + V_C)) $
+  #simpleMathNote([Manipulate exponent$ - V_"in" + V_C = - (V_"in" - V_C)$], 0pt, 0pt)
+  $ (e^((-t A)/R)) dot V_"in" =  (V_"in" - V_C) e^(- A C_2 (V_"in" - (V_"in" - V_C))) $
+  #simpleMathNote([Distribute $-A C_2$ in exponent], 0pt, 0pt)
+  $ (e^((-t A)/R)) dot V_"in" =  (V_"in" - V_C) e^(-A C_2 V_"in" + A C_2(V_"in" - V_C)) $
+  #simpleMathNote([Separate exponent], 0pt, 0pt)
+  $ (e^((-t A)/R)) dot V_"in" =  (V_"in" - V_C) e^(-A C_2 V_"in")  e^(A C_2(V_"in" - V_C)) $
+  #simpleMathNote([Both sides $ div (e^(-A C_2 V_"in"))$], 0pt, 0pt)
+  $ (e^((-t A)/R)) dot V_"in" dot (1/(e^(-A C_2  V_"in"))) =  (V_"in" - V_C) e^(A C_2(V_"in" - V_C)) $
+  #simpleMathNote([Both sides$ dot (A C_2)$], 0pt, 0pt)
+  $ bold( (e^((-t A)/R)) (V_"in") (1/(e^(-A C_2 V_"in"))) (A C_2) =  (A C_2)(V_"in" - V_C) e^(A C_2(V_"in" - V_C))) $
 ]
 
 #showybox(
@@ -1197,15 +1199,38 @@ This Python script was used to generate data for all five simulation results sho
   )
 )[
   #set block(spacing: 0.7em)
-  $ W((e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A)) =  (A) (V_"in" - V_C) $
+  $ W_0((e^((-t A)/R)) (V_"in") (1/(e^(-A C_2 V_"in"))) (A)) =  (A C_2) (V_"in" - V_C) $
+  #simpleMathNote([$ div (A C_2)$], 0pt, 0pt)
+  $ W_0((e^((-t A)/R)) (V_"in") (1/(e^(-A C_2 V_"in"))) (A)) dot (1/(A C_2)) = V_"in" - V_C $
   #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ W((e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A)) (1/A) = V_"in" - V_C $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ W((e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A)) (1/A) - V_"in" =  -V_C $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ V_"in" - W((e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A)) (1/A) =  V_C $
-  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ V_"in" - W((e^((-t)/(R C_1 - R C_2 V_"in")))((A V_"in")/(e^(-A V_"in")))) dot (1/A) =  V_C $
+  $ W_0((e^((-t A)/R)) (V_"in") (1/(e^(-A C_2 V_"in"))) (A)) dot (1/(A C_2)) - V_"in" =  -V_C $
+  #simpleMathNote([$ dot (-1)$], 0pt, 0pt)
+  $ bold(V_"in" - W_0((e^((-t A)/R)) (V_"in") (1/(e^(-A V_"in"))) (A C_2)) (1/(A C_2)) =  V_C) $
+
+]
+
+#showybox(
+  title: [Simplifying],
+  title-style: (color: black),
+  frame: (
+    title-color: black.transparentize(95%),
+    radius: 10pt
+  )
+)[
+  #set block(spacing: 0.7em)
+  $ V_"in" - W_0((e^((-t A)/R)) (V_"in") (1/(e^(-A V_"in"))) (A C_2)) (1/(A C_2)) =  V_C $
+  #simpleMathNote([Simplify], 0pt, 0pt)
+  $ V_"in" - W_0((e^((-t)/(R C_1 - R C_2 V_"in")))(A C_2 V_"in") (1/(e^(-A C_2 V_"in")))) dot (1/(A C_2)) =  V_C $
+  #simpleMathNote([Simplify], 0pt, 0pt)
+  $ V_"in" - W_0((e^((-t)/(R C_1 - R C_2 V_"in")))(A C_2 V_"in") (e^(A C_2 V_"in"))) dot (1/(A C_2)) =  V_C $
+  #simpleMathNote([Simplify], 0pt, 0pt)
+  $ V_"in" - W_0((e^((-t)/(R C_1 - R C_2 V_"in") + A C_2 V_"in"))(A C_2 V_"in")) dot (1/(A C_2)) =  V_C $
+  #simpleMathNote([Simplify], 0pt, 0pt)
+  $ V_"in" - W_0(A C_2 V_"in" dot e^((-t)/(R (C_1 - C_2 V_"in")) + A C_2 V_"in")) dot 1/(A C_2) =  V_C $
+  #simpleMathNote([Simplify], 0pt, 0pt)
+  $ V_"in" - W_0((C_2 V_"in")/(C_1 - C_2 V_"in") dot e^((-t)/(R (C_1 - C_2 V_"in")) + (C_2 V_"in")/(C_1 - C_2 V_"in"))) dot (C_1 - C_2 V_"in")/(C_2) =  V_C $
+  #simpleMathNote([Simplify], 0pt, 0pt)
+  $ V_"in" - W_0((C_2 V_"in")/(C_1 - C_2 V_"in") dot e^((R C_2 V_"in"-t)/(R (C_1 - C_2 V_"in")))) dot (C_1/C_2 - V_"in") =  V_C $
 ]
 
 
