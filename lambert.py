@@ -17,7 +17,6 @@ writer = csv.writer(file)
 R = 1e3
 #5V
 V = 5
-#22uf
 
 C1 = 22e-6
 C2 = 2.29e-6

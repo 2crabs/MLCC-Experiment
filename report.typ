@@ -1,9 +1,9 @@
 //TODO
-// Section 3.3 explain why it is expected
 // Reasoning for time domain on simulations
-// Clarify "DC Bias"
 // Revise bullet point list at end.
-// Add steps to derivation?
+// Add steps to derivation
+// Add explanation of Lambert W
+// Revise Summary
 
 //IMPORTS
 #import "@preview/lilaq:0.5.0" as lq
@@ -72,7 +72,7 @@
 
 //taken from Mc-Zen
 #let appendix(body) = {
-  set heading(numbering: "A", supplement: [Appendix])
+  set heading(numbering: "A.1", supplement: [Appendix])
   counter(heading).update(0)
   body
 }
@@ -861,12 +861,14 @@ All graphs were created using Lilaq, which made data visualization efficient and
 #pagebreak()
 
 #set page(columns: 1)
+#show heading.where(level: 2): none
 #show: appendix
 
 = Experimental Setup and Code <appA>
 
 #counter(figure.where(kind: image)).update(0)
 
+== Photo of Setup
 #figure(
   image("imgs/experiment-far.jpg"),
   caption: [Probing setup]
@@ -874,11 +876,14 @@ All graphs were created using Lilaq, which made data visualization efficient and
 
 A Saleae Logic MSO oscilloscope was used in combination with a PCBite probe and Saleae probe. Alligator clips from a power supply were used.
 #v(1em)
+== PCB Layout
 #figure(
   image("imgs/PCB.png"),
   caption: [PCB layout]
 )
 
+
+== $V_"in"$ Waveforms
 #let (Time-MSO, Trig, Out, VCC-MSO) = lq.load-txt(read("data/oscilloscope_analog.csv"))
 #lq.diagram(
   lq.plot(
@@ -907,9 +912,13 @@ A Saleae Logic MSO oscilloscope was used in combination with a PCBite probe and 
   legend: (position: bottom + right)
 )
 #pagebreak()
+== Simulation Code
 #sourcefile(read("sim.py"), lang: "py")
 This Python script was used to generate data for all five simulation results shown in @sim @sim1 and @sim2. The variable #emph([C]) in line 34 was changed to #emph[C_bias] or #emph[C] to change whether or not to account for DC bias.
 
+#pagebreak()
+== Formula Code
+#sourcefile(read("lambert.py"), lang: "py")
 #pagebreak()
 = Derivations <appB>
 
@@ -921,8 +930,20 @@ This Python script was used to generate data for all five simulation results sho
 #let eqColor5 = purple.lighten(60%)
 #let eqColor6 = purple.lighten(10%)
 
-#set block(spacing: 0.0em)
+#let simpleMathNote(body, right, left) = {
+  align(center)[
+    #table(
+      columns: 1,
+      stroke: none,
+      inset: (right: right, left: left),
+      text(size: 9pt, fill: rgb("#bebebe"))[#body]
+    )
+    
+  ]
+}
 
+#set block(spacing: 0.0em)
+== Integration of New Formula
 #showybox(
   title: [Deriving Modified RC Formula],
   title-style: (color: black),
@@ -931,12 +952,17 @@ This Python script was used to generate data for all five simulation results sho
     radius: (bottom-right: 0pt, top-right: 0pt, rest: 10pt)
   )
 )[
-  #set block(spacing: 1.5em)
+  #set block(spacing: 0.7em)
   $ V_C = V_"in" - R (C_1 - C_2 dot V_C) (d V_C) / (d t) $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
   $ V_C - V_"in" = - R (C_1 - C_2 dot V_C) (d V_C) / (d t) $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
   $ - d t(V_C - V_"in") = R (C_1 - C_2 dot V_C) (d V_C) $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
   $ (- d t(V_C - V_"in"))/R = (C_1 - C_2 dot V_C) (d V_C) $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
   $ (- d t) / (R ) = ((C_1-C_2 V_C) dot (d V_C))/ (V_C - V_"in") $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
   $ colorFormula(integral_0^t (- d t) / (R ), #yellow) = colorFormula(integral_0^V_C ((C_1-C_2 V_C) dot (d V_C))/ (V_C - V_"in"), #blue) $
 ]
 
@@ -949,8 +975,9 @@ This Python script was used to generate data for all five simulation results sho
     radius: (rest: 0pt)
   )
 )[
-  #set block(spacing: 1.5em)
+  #set block(spacing: 0.7em)
   $ integral_0^t ((- d t) / (R)) $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
   $ bold(- t / R) $
 ]
 
@@ -964,10 +991,20 @@ This Python script was used to generate data for all five simulation results sho
     radius: (bottom-left: 10pt, rest: 0pt)
   )
 )[
-  #set block(spacing: 1.5em)
+  #set block(spacing: 0.7em)
   $ integral_0^V_C (C_1-C_2 V_C)/ (V_C - V_"in") d V_C $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
   $ integral_0^V_C C_1/ (V_C - V_"in") + (-C_2 V_C)/ (V_C - V_"in") d V_C $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
   $ colorFormula(integral_0^V_C C_1/ (V_C - V_"in") d V_C, #green) + colorFormula(integral_0^V_C (-C_2 V_C)/ (V_C - V_"in") d V_C, #purple) $
+]
+#align(right)[
+  #box(
+    stroke: (top: 0pt, bottom: 0pt, rest: gradient.linear(black, white, angle: 90deg)),
+    width: 90%,
+    fill: white,
+    height: 60pt
+  )
 ]
 
 #showybox(
@@ -980,9 +1017,11 @@ This Python script was used to generate data for all five simulation results sho
     radius: ( rest: 0pt)
   )
 )[
-  #set block(spacing: 1.5em)
+  #set block(spacing: 0.7em)
   $ integral_0^V_C C_1/ (V_C - V_"in") d V_C $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
   $ C_1 ln(|V_C - V_"in"|) - C_1 ln(|- V_"in"|) $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
   $ bold(C_1 ln(V_"in" - V_C) - C_1 ln(V_"in")) $
 ]
 
@@ -996,11 +1035,15 @@ This Python script was used to generate data for all five simulation results sho
     radius: (bottom-left: 10pt, rest: 0pt)
   )
 )[
-  #set block(spacing: 1.5em)
+  #set block(spacing: 0.7em)
   $ integral_0^V_C (-C_2 V_C)/ (V_C - V_"in") d V_C $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
   $ -C_2 integral_0^V_C V_C/ (V_C - V_"in") d V_C $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
   $ -C_2 integral_0^V_C (V_C - V_"in")/ (V_C - V_"in") + V_"in"/ (V_C - V_"in") d V_C $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
   $ -C_2 integral_0^V_C 1 + V_"in"/ (V_C - V_"in") d V_C $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
   $ colorFormula(-C_2 integral_0^V_C 1 d V_C, #eqColor5) + colorFormula(-C_2 integral_0^V_C V_"in"/ (V_C - V_"in") d V_C, #eqColor6) $
 ]
 
@@ -1011,12 +1054,23 @@ This Python script was used to generate data for all five simulation results sho
   title-style: (color: black),
   frame: (
     title-color: eqColor5,
-    radius: (rest: 0pt)
+    radius: (rest: 0pt),
+    thickness: (bottom: 0pt, rest: 1pt)
   )
 )[
-  #set block(spacing: 1.5em)
+  #set block(spacing: 0.7em)
   $ -C_2 integral_0^V_C 1 d V_C $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
   $ bold(-C_2 V_C) $
+]
+
+#align(right)[
+  #box(
+    stroke: (top: 0pt, bottom: 0pt, rest: gradient.linear(black, white, angle: 90deg)),
+    width: 85%,
+    fill: white,
+    height: 100pt
+  )
 ]
 
 #showybox(
@@ -1029,87 +1083,132 @@ This Python script was used to generate data for all five simulation results sho
     radius: (bottom-left: 10pt, bottom-right: 10pt, rest: 0pt)
   )
 )[
-  #set block(spacing: 1.5em)
+  #set block(spacing: 0.7em)
   $ -C_2 integral_0^V_C V_"in"/ (V_C - V_"in") d V_C $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
   $ -C_2 V_"in" integral_0^V_C 1 / (V_C - V_"in") d V_C $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
   $ -C_2 V_"in" ln(|V_C - V_"in"|) + C_2 V_"in" ln(|- V_"in"|) $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
   $ bold(-C_2 V_"in" ln(V_"in" - V_C) + C_2 V_"in" ln(V_"in")) $
 ]
 
-#pagebreak()
+#v(40pt)
 
 #showybox(
   title: [Combining results],
   title-style: (color: black),
   frame: (
     title-color: black.transparentize(95%),
-    radius: (bottom-right: 0pt, bottom-left: 0pt, rest: 10pt)
+    radius: 10pt
   )
 )[
-  #set block(spacing: 1.5em)
-  $ (- t) / R &= C_1 ln(V_"in" - V_C) - C_1 ln(V_"in") -C_2 V_"in" ln(V_"in" - V_C) + C_2 V_"in" ln(V_"in") - C_2 V_C \ #v(2em)
-  &=  ln(V_"in" - V_C) (C_1 - C_2 V_"in") - ln(V_"in") (-C_1 + C_2 V_"in") - C_2 V_C \ #v(2em)
-  &= ln(V_"in" - V_C) (C_1 - C_2 V_"in") + ln(V_"in") (C_1 - C_2 V_"in") - C_2 V_C \ #v(2em)
-  &=  (C_1 - C_2 V_"in") (ln(V_"in" - V_C) + ln(V_"in")) - C_2 V_C \ #v(2em)
-  &=  (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_C $
+  #set block(spacing: 0.7em)
+  $ (- t) / R = C_1 ln(V_"in" - V_C) - C_1 ln(V_"in") -C_2 V_"in" ln(V_"in" - V_C) + C_2 V_"in" ln(V_"in") - C_2 V_C $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ (- t) / R = ln(V_"in" - V_C) (C_1 - C_2 V_"in") - ln(V_"in") (-C_1 + C_2 V_"in") - C_2 V_C $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ (- t) / R = ln(V_"in" - V_C) (C_1 - C_2 V_"in") + ln(V_"in") (C_1 - C_2 V_"in") - C_2 V_C $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ (- t) / R = (C_1 - C_2 V_"in") (ln(V_"in" - V_C) + ln(V_"in")) - C_2 V_C $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ bold( (- t) / R = (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_C) $
 ]
 
-#showybox(
-  title: [Isolating $t$],
-  title-style: (color: black),
-  frame: (
-    title-color: black.transparentize(95%),
-    radius: 0pt
-  )
-)[
-  #set block(spacing: 1.5em)
-  $ (- t) / R =  (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_C $
-  $ -t =   - R C_2 V_C + (R) (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) $
-  $ bold(t =   R C_2 V_C - (R) (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in"))) $
-]
+// #showybox(
+//   title: [Isolating $t$],
+//   title-style: (color: black),
+//   frame: (
+//     title-color: black.transparentize(95%),
+//     radius: 0pt
+//   )
+// )[
+//   #set block(spacing: 0.5em)
+//   $ (- t) / R =  (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_C $
+//   #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+//   $ -t =   - R C_2 V_C + (R) (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) $
+//   #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+//   $ bold(t =   R C_2 V_C - (R) (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in"))) $
+// ]
 
-#showybox(
-  title: [Isolating $V_C$],
-  title-style: (color: black),
-  frame: (
-    title-color: black.transparentize(95%),
-    radius: (bottom-right: 10pt, bottom-left: 10pt, rest: 1pt)
-  )
-)[
-  #set block(spacing: 1.5em)
-  $ (- t) / R +  C_2 V_C = (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) $
-  $ ((- t) / R +  C_2 V_C)/(C_1 - C_2 V_"in") =   ln((V_"in" - V_C)/V_"in") $
-  $ e^(((- t) / R +  C_2 V_C)/(C_1 - C_2 V_"in")) =   (V_"in" - V_C)/V_"in" $
-  $ V_"in"e^(((- t) / R +  C_2 V_C)/(C_1 - C_2 V_"in")) =   V_"in" - V_C $
-  $ V_"in"e^(((- t) / R +  C_2 V_C)/(C_1 - C_2 V_"in")) - V_"in" = - V_C $
-  $ -V_"in"e^(((- t) / R +  C_2 V_C)/(C_1 - C_2 V_"in")) + V_"in" = V_C $
-  $ bold(V_"in" (1 - e^(((- t) / R +  C_2 V_C)/(C_1 - C_2 V_"in"))) = V_C) $
-]
+// #showybox(
+//   title: [Isolating $V_C$],
+//   title-style: (color: black),
+//   frame: (
+//     title-color: black.transparentize(95%),
+//     radius: (bottom-right: 10pt, bottom-left: 10pt, rest: 1pt)
+//   )
+// )[
+//   #set block(spacing: 0.5em)
+//   $ (- t) / R +  C_2 V_C = (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) $
+//   $ ((- t) / R +  C_2 V_C)/(C_1 - C_2 V_"in") =   ln((V_"in" - V_C)/V_"in") $
+//   $ e^(((- t) / R +  C_2 V_C)/(C_1 - C_2 V_"in")) =   (V_"in" - V_C)/V_"in" $
+//   $ V_"in"e^(((- t) / R +  C_2 V_C)/(C_1 - C_2 V_"in")) =   V_"in" - V_C $
+//   $ V_"in"e^(((- t) / R +  C_2 V_C)/(C_1 - C_2 V_"in")) - V_"in" = - V_C $
+//   $ -V_"in"e^(((- t) / R +  C_2 V_C)/(C_1 - C_2 V_"in")) + V_"in" = V_C $
+//   $ bold(V_"in" (1 - e^(((- t) / R +  C_2 V_C)/(C_1 - C_2 V_"in"))) = V_C) $
+// ]
 
-#set heading(supplement: [dix])
-#pagebreak()
+
 #set block(spacing: 1.5em)
-$ (-t)/R = (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_C $
-$ (-t)/((R) dot (C_1 - C_2 V_"in")) =  ln((V_"in" - V_C)/V_"in") - (C_2 V_C)/(C_1 - C_2 V_"in") $
-$ A = (C_2)/(C_1 - C_2 V_"in") $
-$ e^((-t)/((R) dot (C_1 - C_2 V_"in"))) =  e^(ln((V_"in" - V_C)/V_"in") - A V_C) $
+== Using Lambert W Function
+#showybox(
+  title: [Manipulating into Lambert W form],
+  title-style: (color: black),
+  frame: (
+    title-color: black.transparentize(95%),
+    radius: 10pt
+  )
+)[
+  #set block(spacing: 0.7em)
+  $ (-t)/R = (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_C $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ (-t)/((R) dot (C_1 - C_2 V_"in")) =  ln((V_"in" - V_C)/V_"in") - (C_2 V_C)/(C_1 - C_2 V_"in") $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ A = (C_2)/(C_1 - C_2 V_"in") $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ e^((-t)/((R) dot (C_1 - C_2 V_"in"))) =  e^(ln((V_"in" - V_C)/V_"in") - A V_C) $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ e^((-t)/((R) dot (C_1 - C_2 V_"in"))) =  e^(ln((V_"in" - V_C)/V_"in")) e^(- A V_C) $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ e^((-t)/((R) dot (C_1 - C_2 V_"in"))) =  ((V_"in" - V_C)/V_"in") e^(- A V_C) $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(- A V_C) $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(- A (V_"in" - V_"in" + V_C)) $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(- A (V_"in" - (V_"in" - V_C))) $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(-A V_"in" + A(V_"in" - V_C)) $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(-A V_"in")  e^(A(V_"in" - V_C)) $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" dot (1/(e^(-A V_"in"))) =  (V_"in" - V_C) e^(A(V_"in" - V_C)) $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A) =  (A)(V_"in" - V_C) e^(A(V_"in" - V_C)) $
+]
 
-$ e^((-t)/((R) dot (C_1 - C_2 V_"in"))) =  e^(ln((V_"in" - V_C)/V_"in")) e^(- A V_C) $
-$ e^((-t)/((R) dot (C_1 - C_2 V_"in"))) =  ((V_"in" - V_C)/V_"in") e^(- A V_C) $
-$ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(- A V_C) $
-$ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(- A (V_"in" - V_"in" + V_C)) $
-$ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(- A (V_"in" - (V_"in" - V_C))) $
-$ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(-A V_"in" + A(V_"in" - V_C)) $
-$ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" =  (V_"in" - V_C) e^(-A V_"in")  e^(A(V_"in" - V_C)) $
-$ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) dot V_"in" dot (1/(e^(-A V_"in"))) =  (V_"in" - V_C) e^(A(V_"in" - V_C)) $
-$ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A) =  (A)(V_"in" - V_C) e^(A(V_"in" - V_C)) $
-$ (e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-C_2 V_"in"))) (A) =  (A) (V_"in" - V_C) e^(A(V_"in" - V_C)) $
+#showybox(
+  title: [Isolating],
+  title-style: (color: black),
+  frame: (
+    title-color: black.transparentize(95%),
+    radius: 10pt
+  )
+)[
+  #set block(spacing: 0.7em)
+  $ W((e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A)) =  (A) (V_"in" - V_C) $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ W((e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A)) (1/A) = V_"in" - V_C $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ W((e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A)) (1/A) - V_"in" =  -V_C $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ V_"in" - W((e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A)) (1/A) =  V_C $
+  #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
+  $ V_"in" - W((e^((-t)/(R C_1 - R C_2 V_"in")))((A V_"in")/(e^(-A V_"in")))) dot (1/A) =  V_C $
+]
 
-$ W((e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A)) =  (A) (V_"in" - V_C) $
-$ W((e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A)) (1/A) = V_"in" - V_C $
-$ W((e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A)) (1/A) - V_"in" =  -V_C $
-$ V_"in" - W((e^((-t)/((R) dot (C_1 - C_2 V_"in")))) (V_"in") (1/(e^(-A V_"in"))) (A)) (1/A) =  V_C $
-$ V_"in" - W((e^((-t)/(R C_1 - R C_2 V_"in")))((A V_"in")/(e^(-A V_"in")))) dot (1/A) =  V_C $
 
 #pagebreak()
+#set heading(supplement: [dix])
 #bibliography("works.bib")
