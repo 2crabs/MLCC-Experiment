@@ -1,9 +1,7 @@
 //TODO
-// Reasoning for time domain on simulations
-// Revise bullet point list at end.
-// Add steps to derivation
-// Add explanation of Lambert W
 // Revise Summary
+// REVIEW and REVISE
+// Done!
 
 //IMPORTS
 #import "@preview/lilaq:0.5.0" as lq
@@ -527,25 +525,50 @@ This appears to be much closer to the actual capacitor than what would be predic
 == Overview
 In this section we will attempt to derive a formula for the same method used in the second part of the previous section.
 
-In @SimImplementation, the approximation $C(V) = #approx1_C1 mu"F" - (#approx1_C2 mu"F" dot V)$ was used. We will continue to use a linear approximation but transfer to an equation form with arbitrary values. $#approx1_C1 mu"F"$ and $ #approx1_C2 mu"F"$ are replaced with $C_1$ and $C_2$ respectively. Thus the new formula is:
+In @SimImplementation, the approximation $C(V) = #approx1_C1 mu"F" - (#approx1_C2 mu"F" dot V)$ was used. We will continue to use a linear approximation but transfer to a form with arbitrary values. $#approx1_C1 mu"F"$ and $ #approx1_C2 mu"F"$ are replaced with $C_1$ and $C_2$ respectively. Thus the new formula is:
 
 $ C(V) = C_1 - C_2 dot V $<eqFuncOfC>
 
 This formula replaces the constant $C$ in @baseRC.
 
 $ V_C = V_"in" - R (C_1 - C_2 dot V_C) (d V_C) / (d t) $
+
+Using this new equation we are able to follow a similar process as shown in @RCderiv.
 == Results
 
 
 Using the derivation shown in @appB the following equation is found.
 
-$ V_"in" (1-e^((C_2 V_C - t/R)/(C_1 - C_2 V_"in"))) = V_C $
+$ (- t) / R = (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_C $
 
-Due to the term $C_2 V_C$ being inside of the exponent, $V_C$ is difficult to isolate, a process out of the scope of this paper. Despite this, time can be found based on voltage. The formula where time is isolated is shown below.
+In this equation, $V_C$, the variable we want to isolate, is both inside and outside the the logarithm. A simplified model of this looks like:
+$ x = ln(y) + y $<eqSimplified>
 
-$ t =   R C_2 V_C - (R) (C_1 - C_2 V_"in")(ln((V_"in" - V_C)/V_"in")) $
+Solving this equation requires the _Lambert W Function_. This function, represented $W$, acts as the inverse of $z e^z$ @bibLambert. That is:
 
-By calculating $t$ Using a large number of values of $V_C$ in our range of $0V <= V_C < V_"in"$ we are able to to obtain a curve. Using $C_1 = #approx1_C1 mu"F"$ and $C_2 = #approx1_C2 mu"F"$, a curve is obtained using this method and plotted in @NewFormula
+$  W(z e^z) = z $
+
+We can manipulate @eqSimplified into this form using the following process: Exponentiate
+
+#v(1em)
+#set block(spacing: 0.5em)
+$ x = ln(y) + y $
+#simpleMathNote([Exponentiate both sides], 0pt, 0pt)
+$ e^x = e^(ln(y) + y) $
+#simpleMathNote([Split exponent], 0pt, 0pt)
+$ e^x = e^ln(y) dot e^y $
+#simpleMathNote([Simplify], 0pt, 0pt)
+$ e^x = y e^y $
+#set block(spacing: 1.6em)
+#v(1em)
+
+Here we can apply use the Lambert W function to isolate $y$:
+$ W(e^x) = y $
+Using a similar process, found in @appB, we are able to isolate $V_C$. The resulting formula for $V_C$ is shown below.
+
+$ V_"in" - W((C_2 V_"in")/(C_1 - C_2 V_"in") dot e^((R C_2 V_"in"-t)/(R (C_1 - C_2 V_"in"))))(C_1/C_2 - V_"in") $
+
+This formula was implemented in Python, and the results are graphed in @NewFormula. Code can be found in @appB.
 
 #let vDeriv = (0.1, 1.0 ,2.0 ,3.0 ,4.0, 4.5 ,4.9, 4.99)
 #let vRange = lq.linspace(0, 199).map(x => x/40)
@@ -579,8 +602,6 @@ By calculating $t$ Using a large number of values of $V_C$ in our range of $0V <
   caption: [New formula compared to RC formula]
 )<NewFormula>
 
-As expected, the results of using this formula are functionally identical to the simulation and when compared to the original RC formula, the results are far more accurate
-
 
 = Generalization <generalizationSection>
 == Factors Considered
@@ -589,10 +610,10 @@ Up to this point, only one capacitor has been analyzed, but the aim of this pape
 
 Multi-layer ceramic capacitors have many characteristics, but the most important are:
 
-- Capacitance
-- Physical size (eg. 1206, 0805, 0603)
-- Maximum voltage
-- Temperature coefficient
+- #strong[Capacitance]: $C$ (e.g, $10mu"F"$) #v(0.3em)
+- #strong[Package Size]: The physical size of the capacitor (e.g, 0805) #v(0.3em)
+- #strong[Maximum Voltage]: The voltage maximum voltage applied across the capacitor where it will not break (e.g, 6.3V) #v(0.3em)
+- #strong[Temperature Coefficient]: The capacitor stability across its temperature range (e.g, X5R)
 
 In this paper only 0805 X5R capacitors will be examined due to being one of the most used package sizes and temperature coefficients.
 #let (vmax_V1, vmax_C1, vmax_dif1) = lq.load-txt(read("data/4u76v3S.csv"))
@@ -838,17 +859,19 @@ $ C - 0.0352C^(8/5) $<eqFinal>
 Combined with the equations derived in @math it is possible to more accurately predict the time it will take for a MLCC used in an RC circuit to rise to a given voltage level.
 
 = Comparison of Methods
-
-A comparison of the code used in both @sim and @math what created using the code in @appA to measure performance. The method created in will generate more performative results with superior results. Method #2 is superior because to find the voltage at any given time does not require calaculating all the voltages before that time.
-
 Using @eqFuncOfC for capacitance created the same results for both the simulation and formula, but the simulation offered a greater flexibility. For example, using a simulation would make it possible to model two capacitors with different DC bias curves used in parallel.
+
+However, using the formula is more computationally efficient, because it is not neccessary to compute all voltages before a certain time to obtain the voltage at that time.
 
 While the rated capacitance can be used to estimate the effect of DC bias as shown in @generalizationSection, it is more accurate and practical to refer to the curve from the manufacturer and construct a function for capacitance using capacitor specific data.
 
-The experiment done in @experimentSection shows the importance of not relying on the rated capacitance as the 22$mu"F"$ capacitor tested was closer to a 16$mu"F"$ capacitor, a reduction in capacitance of $approx 27%$. Despite the importance of DC bias in multi-layer ceramic capacitors, there are  other effects that must be taken into consideration such as temperature and aging @OpenSource.
+Despite the improvments made in capacitor modelling, there are  other effects that must be taken into consideration such as temperature and aging which also play a large role in MLCC behavior @OpenSource.
 
 
 = Conclusion
+
+Experimental results, done in @experimentSection, demonstrated the importance of not relying on the rated capacitance as the 22$mu"F"$ capacitor tested was closer to a 16$mu"F"$ capacitor, a reduction in capacitance of $approx 27%$.
+
 The creation of this IA did include a few unexpected turns. Originally SPICE (Simulation Program with Integrated Circuit Emphasis) was going to be used, but was replaced by the simulation written in Python due to inflexibilities in the software. The results of this turned out to be quite useful.
 
 In @math I did learn about the #emph[Lambert W Function], but its complexity limited its use.
@@ -1203,13 +1226,13 @@ This Python script was used to generate data for all five simulation results sho
   )
 )[
   #set block(spacing: 0.7em)
-  $ W_0((e^((-t A)/R)) (V_"in") (1/(e^(-A C_2 V_"in"))) (A)) =  (A C_2) (V_"in" - V_C) $
+  $ W((e^((-t A)/R)) (V_"in") (1/(e^(-A C_2 V_"in"))) (A)) =  (A C_2) (V_"in" - V_C) $
   #simpleMathNote([$ div (A C_2)$], 0pt, 0pt)
-  $ W_0((e^((-t A)/R)) (V_"in") (1/(e^(-A C_2 V_"in"))) (A)) dot (1/(A C_2)) = V_"in" - V_C $
+  $ W((e^((-t A)/R)) (V_"in") (1/(e^(-A C_2 V_"in"))) (A)) dot (1/(A C_2)) = V_"in" - V_C $
   #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ W_0((e^((-t A)/R)) (V_"in") (1/(e^(-A C_2 V_"in"))) (A)) dot (1/(A C_2)) - V_"in" =  -V_C $
+  $ W((e^((-t A)/R)) (V_"in") (1/(e^(-A C_2 V_"in"))) (A)) dot (1/(A C_2)) - V_"in" =  -V_C $
   #simpleMathNote([$ dot (-1)$], 0pt, 0pt)
-  $ bold(V_"in" - W_0((e^((-t A)/R)) (V_"in") (1/(e^(-A V_"in"))) (A C_2)) (1/(A C_2)) =  V_C) $
+  $ bold(V_"in" - W((e^((-t A)/R)) (V_"in") (1/(e^(-A V_"in"))) (A C_2)) (1/(A C_2)) =  V_C) $
 
 ]
 
@@ -1222,19 +1245,19 @@ This Python script was used to generate data for all five simulation results sho
   )
 )[
   #set block(spacing: 0.7em)
-  $ V_"in" - W_0((e^((-t A)/R)) (V_"in") (1/(e^(-A V_"in"))) (A C_2)) (1/(A C_2)) =  V_C $
+  $ V_"in" - W((e^((-t A)/R)) (V_"in") (1/(e^(-A V_"in"))) (A C_2)) (1/(A C_2)) =  V_C $
   #simpleMathNote([Simplify], 0pt, 0pt)
-  $ V_"in" - W_0((e^((-t)/(R C_1 - R C_2 V_"in")))(A C_2 V_"in") (1/(e^(-A C_2 V_"in")))) dot (1/(A C_2)) =  V_C $
+  $ V_"in" - W((e^((-t)/(R C_1 - R C_2 V_"in")))(A C_2 V_"in") (1/(e^(-A C_2 V_"in")))) dot (1/(A C_2)) =  V_C $
   #simpleMathNote([Simplify], 0pt, 0pt)
-  $ V_"in" - W_0((e^((-t)/(R C_1 - R C_2 V_"in")))(A C_2 V_"in") (e^(A C_2 V_"in"))) dot (1/(A C_2)) =  V_C $
+  $ V_"in" - W((e^((-t)/(R C_1 - R C_2 V_"in")))(A C_2 V_"in") (e^(A C_2 V_"in"))) dot (1/(A C_2)) =  V_C $
   #simpleMathNote([Simplify], 0pt, 0pt)
-  $ V_"in" - W_0((e^((-t)/(R C_1 - R C_2 V_"in") + A C_2 V_"in"))(A C_2 V_"in")) dot (1/(A C_2)) =  V_C $
+  $ V_"in" - W((e^((-t)/(R C_1 - R C_2 V_"in") + A C_2 V_"in"))(A C_2 V_"in")) dot (1/(A C_2)) =  V_C $
   #simpleMathNote([Simplify], 0pt, 0pt)
-  $ V_"in" - W_0(A C_2 V_"in" dot e^((-t)/(R (C_1 - C_2 V_"in")) + A C_2 V_"in")) dot 1/(A C_2) =  V_C $
+  $ V_"in" - W(A C_2 V_"in" dot e^((-t)/(R (C_1 - C_2 V_"in")) + A C_2 V_"in")) dot 1/(A C_2) =  V_C $
   #simpleMathNote([Simplify], 0pt, 0pt)
-  $ V_"in" - W_0((C_2 V_"in")/(C_1 - C_2 V_"in") dot e^((-t)/(R (C_1 - C_2 V_"in")) + (C_2 V_"in")/(C_1 - C_2 V_"in"))) dot (C_1 - C_2 V_"in")/(C_2) =  V_C $
+  $ V_"in" - W((C_2 V_"in")/(C_1 - C_2 V_"in") dot e^((-t)/(R (C_1 - C_2 V_"in")) + (C_2 V_"in")/(C_1 - C_2 V_"in"))) dot (C_1 - C_2 V_"in")/(C_2) =  V_C $
   #simpleMathNote([Simplify], 0pt, 0pt)
-  $ V_"in" - W_0((C_2 V_"in")/(C_1 - C_2 V_"in") dot e^((R C_2 V_"in"-t)/(R (C_1 - C_2 V_"in")))) dot (C_1/C_2 - V_"in") =  V_C $
+  $ V_"in" - W((C_2 V_"in")/(C_1 - C_2 V_"in") dot e^((R C_2 V_"in"-t)/(R (C_1 - C_2 V_"in")))) dot (C_1/C_2 - V_"in") =  V_C $
 ]
 
 
