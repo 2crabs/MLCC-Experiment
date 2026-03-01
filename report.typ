@@ -839,6 +839,8 @@ Combined with the equations derived in @math it is possible to more accurately p
 
 = Comparison of Methods
 
+A comparison of the code used in both @sim and @math what created using the code in @appA to measure performance. The method created in will generate more performative results with superior results. Method #2 is superior because to find the voltage at any given time does not require calaculating all the voltages before that time.
+
 Using @eqFuncOfC for capacitance created the same results for both the simulation and formula, but the simulation offered a greater flexibility. For example, using a simulation would make it possible to model two capacitors with different DC bias curves used in parallel.
 
 While the rated capacitance can be used to estimate the effect of DC bias as shown in @generalizationSection, it is more accurate and practical to refer to the curve from the manufacturer and construct a function for capacitance using capacitor specific data.
@@ -919,6 +921,8 @@ This Python script was used to generate data for all five simulation results sho
 #pagebreak()
 == Formula Code
 #sourcefile(read("lambert.py"), lang: "py")
+#pagebreak()
+#sourcefile(read("performance.py"), lang: "py")
 #pagebreak()
 = Derivations <appB>
 

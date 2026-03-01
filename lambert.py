@@ -3,12 +3,10 @@ import math
 import csv
 
 def formula(R, V, C1, C2, t):
-    A = C2/(C1-C2*V)
-    power = math.exp((-t)/((R*C1) - (R*C2*V)))
-    fraction = (A*V) * (math.exp(A*V))
-    lambertInner = power * fraction
-    lambert = special.lambertw(lambertInner, tol = 1e-9).real
-    return V - (lambert * (1/A))
+    power = math.exp(((R * C2 * V)-t)/(R * (C1 - C2 * V)))
+    fraction = (C2 * V)/(C1 - C2 * V)
+    lambert = special.lambertw(power * fraction)
+    return V - (lambert * ((C1/C2)-V))
 
 file = open("data/lambert.csv", mode= "w", newline = "")
 writer = csv.writer(file)
@@ -23,16 +21,15 @@ C2 = 2.29e-6
 
 #100ms
 end = 0.1
-steps = 20
+steps = 5
 dt = end/steps
 t = 0
 
 writer.writerow([0, 0])
 
-#DC Bias capacitor
 for i in range(steps):
     t = t + dt
-    result = formula(R, V, C1, C2, t)
+    result = formula(R, V, C1, C2, t).real
     writer.writerow([t, result])
 
 file.close()
