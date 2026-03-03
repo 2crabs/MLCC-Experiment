@@ -15,7 +15,7 @@
 
 #let mathStuff(number) = {
   for value in range(1,number) {
-    [#text(fill:  rgb("#bcbcbc"))[math ]]
+    [#text(fill:  rgb("#c1c1c1"))[math ]]
   }
 }
 
@@ -61,8 +61,10 @@
 
 
 #title()[Effect of DC Bias on Effective Capacitance of MLCCs]
+//#title()[Modeling MLCC DC Bias Across Large Voltage Changes]
 #v(5pt)
-#align(center, text(font: "TeX Gyre Bonum")[McGill Fraser])
+//#align(center, text(font: "TeX Gyre Bonum")[McGill Fraser])
+#align(center, text(font: "TeX Gyre Bonum")[IB HL Math: Analysis and Approaches])
 #pagebreak()
 
 
@@ -81,7 +83,7 @@
 
 
 #outline(depth: 2, target: heading.where(supplement: [Section]))
-#outline(target: heading.where(supplement: [Appendix]), title: [Appendix])
+#outline(target: heading.where(supplement: [Appendix]), title: [Appendix], depth: 1)
 //#outline(target: figure.where(kind: image), title: [Figures])
 //#outline(target: figure.where(kind: table), title: [Tables])
 
@@ -172,10 +174,10 @@ $ 5"V" = I dot 100 Omega $
 $ (5"V")/(100 Omega) = I $
 $ 0.05"A" = I $
 
-As seen above knowing any two variables of this equation allows solving for the third. The equation can be manipulated to solve for Resistance, $R = I/V$, or current, $I = V/R$.
+As seen above knowing any two variables of this equation allows solving for the third. The equation can be manipulated to solve for Resistance, $R = V/I$, or current, $I = V/R$.
 
 == Model of Capacitor <C>
-A capacitor is a device where the current flowing through is proportional to the rate of change of voltage across the capacitor @ArtOfElectronics. That is,
+A capacitor is a device where the current flowing through is proportional to the rate of change of voltage across the capacitor @ArtOfElectronics. That is:
 $ I = C (d V)/(d t) $<eqC>
 where $C$ is the capacitance in Farads. When a capacitor is connected to a constant current source the voltage across the capacitor will increase at a constant rate. The schematic of this situation is depicted in @schematicC. Conversely when a capacitor provides a constant current the voltage decreases at a constant rate.
 
@@ -186,7 +188,7 @@ where $C$ is the capacitance in Farads. When a capacitor is connected to a const
 
  Functionally, a capacitor acts similarly to a battery in that it can be charged and then discharged.
 
-This models an ideal capacitor, a capacitor that behaves exactly as mathematically modelled, but real capacitors and especially multi-layer ceramic capacitors face non-idealities, which change this model. One of the most important, yet often overlooked, non-idealities in MLCCs is the effect of DC bias. DC bias causes the capacitance, $C$, to be reduced as a constant voltage is applied across the capacitor @OpenSource. This introduces a new curve, which is the capacitance versus DC bias curve. Manufacturers of capacitors will provide this data @Murata. An example of the DC bias graph of a standard capacitor is shown in @bias.
+This models an ideal capacitor, a capacitor that behaves exactly as mathematically modelled, but real capacitors and especially multi-layer ceramic capacitors face non-idealities, which change their behavior. One of the most important, yet often overlooked, non-idealities in MLCCs is the effect of DC bias. DC bias causes the capacitance, $C$, to be reduced as a constant voltage is applied across the capacitor @OpenSource. This introduces a new curve, which is the capacitance versus DC bias curve. Manufacturers of capacitors will provide this data @Murata. An example of the DC bias graph of a standard capacitor is shown in @bias.
 
 These curves have a domain of $0<V<V_max$ due to maximum ratings and capacitors being bidirectional.
 
@@ -205,15 +207,15 @@ These curves have a domain of $0<V<V_max$ due to maximum ratings and capacitors 
     ),
     inset: (right: 20pt, bottom: 4pt)
   ),
-  caption: [DC Bias of 22$mu"F"$ capacitor from Murata]
+  caption: [DC bias of 22$mu"F"$ capacitor from Murata]
 )<bias>
 
 Because capacitance is in fact a function of voltage, $C = C(V)$, a more accurate model of a capacitor is $I = C(V) (d V)/(d t)$. This is important when there is large change in voltage across the capacitor. This effect will be referred to as DC bias throughout this paper.
 == Research Question
 
-The effect of DC Bias is mainly used for noise suppression applications. In these situations, because the voltage across the capacitor has a relatively small range, it is sufficient to assume $C$ as constant, functionally making the capacitor a lower-value version of itself. This cannot be done when a device is first turned on, and a MLCC goes from 0V to $V_"in"$, a large voltage change. During this transition the capacitor has a large range of capacitance from $C(0V)$ to $C(V_"in")$.
+The effect of DC bias is mainly used for noise suppression applications. In these situations, because the voltage across the capacitor has a relatively small range, it is sufficient to assume $C$ as constant, functionally making the capacitor a lower-value version of itself. This cannot be done when a device is first turned on, and a MLCC goes from 0V to $V_"in"$, a large voltage change. During this transition the capacitor has a large range of capacitance from $C(0V)$ to $C(V_"in")$.
 
-Due to many systems requiring supply voltage to stabilize before being activated, components often will have a voltage sensing input that will only allow the device to turn on when the voltage reaches a certain threshold. This is often achieved by using a capacitor to limit how fast the voltage on this input rises. Meeting rigid timing requirements necessitates knowing how quickly the voltage across a capacitor will rise. The aim of this paper is to predict the effect DC Bias has on the effective capacitance of a MLCC during large voltage changes such as those found in device turn on.
+Due to many systems requiring supply voltage to stabilize before being activated, components often will have a voltage sensing input that will only allow the device to turn on when the voltage reaches a certain threshold. Delaying device turn on is often achieved by using a capacitor to limit how fast the voltage on this input rises. Meeting rigid timing requirements necessitates knowing how quickly the voltage across a capacitor will rise. The aim of this paper is to predict the effect DC bias has on the effective capacitance of a MLCC during large voltage changes such as those found in device turn on.
 
 = RC Formula <RC>
 
@@ -238,7 +240,7 @@ $ V_C =  V_"in" - I R $
 
 And because current through the resistor is equivalent to current through the capacitor, we are able to use @eqC from @C to replace $I$:
 
-$ V_C = V_"in" - R C (d V) / (d t) $<baseRC>
+$ V_C = V_"in" - R C (d V_C) / (d t) $<baseRC>
 
 The equation in this form is not very helpful because it not possible to directly input a time and get an output voltage. Because of this, the equation is almost always manipulated into the RC formula, shown below. The derivation of @eqRC is explained in @RCderiv.
 
@@ -293,15 +295,15 @@ $ V_C = V_"in" - R C (d V_C) / (d t) $
 #mathNote([$- V_"in"$], 10pt, 10pt)
 $ V_C - V_"in" = -R C (d V_C) / (d t) $
 #mathNote([$div R C$], 10pt, 10pt)
-$ (V_C - V_"in")/(R C) = -(d V) / (d t) $
+$ (V_C - V_"in")/(R C) = -(d V_C) / (d t) $
 #mathNote([$dot d t$], 15pt, 20pt)
-$ ((d t)(V_C - V_"in"))/(R C) = -d V $
+$ ((d t)(V_C - V_"in"))/(R C) = -d V_C $
 #mathNote([$div (V_C - V_"in")$], 1pt, 15pt)
-$ (d t)/(R C) = (-d V) / (V_C - V_"in") $
+$ (d t)/(R C) = (-d V_C) / (V_C - V_"in") $
 #simpleMathNote([Take integral], 10pt, 10pt)
 $ integral_0^(t) (d t)/(R C) = integral_0^(V_C) (-d V_C) / (V_C - V_"in") $
 #simpleMathNote([Integrate], 10pt, 10pt)
-$ t/(R C) = -ln(V_C - V_"in") - ln(-V_"in") $
+$ t/(R C) = -(ln(V_C - V_"in") - ln(-V_"in")) $
 #simpleMathNote([Combine logarithms], 10pt, 10pt)
 $ t/(R C) = -ln((V_C - V_"in")/(-V_"in")) $
 #mathNote([$dot (- 1)$], 10pt, 10pt)
@@ -324,7 +326,7 @@ As a method of finding electrical behavior, an experiment is the costliest and m
 Despite this shortcoming, an experiment is invaluable in that it will always provide the highest degree of accuracy to how a component will behave in the real world. Due to this, the results from this experiment will be the benchmark for the methods used in @sim and @math.
 
 == Setup
-A printed circuit board designed for a RC circuit, shown in @appA, was populated with a 1$"k"Omega$ resistor and a 22$mu"F"$ capacitor with a rated voltage of 6.3V. The circuit board was then held in place with exposed positive and negative wires. A power supply was set to 5V with no current limit and the negative side of the power supply and PCB were connected. An oscilloscope probe with a ground spring was connected across the capacitor. Another probe was connected between the two power wires. The capacitor was discharged by shorting the two ends using metal tweezers. The positive side of the power supply was then put in contact with the resistor side of the PCB and a waveform was obtained. This setup is depicted in @experiment. More details on the PCB and oscilloscope used can be found in @appA.
+A printed circuit board designed for a RC circuit, shown in @appA, was populated with a 1$"k"Omega$ resistor and a 22$mu"F"$ capacitor. The circuit board was then held in place with exposed positive and negative wires. A power supply was set to 5V with no current limit and the negative side of the power supply and PCB were connected. An oscilloscope probe with a ground spring was connected across the capacitor. Another probe was connected between the two power wires. The capacitor was discharged by shorting the two ends using metal tweezers. The positive side of the power supply was then put in contact with the resistor side of the PCB and a waveform was obtained. This setup is depicted in @experiment. More details on the PCB and oscilloscope used can be found in @appA.
 
 #figure(
   image("imgs/experiment-close.jpg"),
@@ -353,7 +355,7 @@ As predicted in @RC, the voltage rises faster than an ideal 22$mu"F"$ capacitor.
         label: [Experiment]
       ),
       xlabel: [Time (s)],
-      ylabel: [$V_"out"$],
+      ylabel: [$V_C$],
       legend: (position: bottom + right)
     ),
     inset: (right: 20pt, bottom: 4pt)
@@ -361,7 +363,7 @@ As predicted in @RC, the voltage rises faster than an ideal 22$mu"F"$ capacitor.
   caption: [Ideal capacitor compared to experimental results],
 )<exp1>
 
-Using this graph we are able to to try to find a capacitor of a lower value that is more consistent with the experimental results. Using a point on the curve, a capacitor that takes an equivalent amount of time to get to that point can be calculated using the @eqRC. A point of (0.03669s, 4.511V) was chosen and the values of $t = 0.03669"s"$ and $V = 4.511"V"$ were substituted into @eqRC as shown below.
+Using this graph we are able to to try to find a capacitor of a lower value that is more consistent with the experimental results. Using a point on the curve, a capacitor that takes an equivalent amount of time to get to that point can be calculated using @eqRC. A point of (0.03669s, 4.511V) was chosen and the values of $t = 0.03669"s"$ and $V = 4.511"V"$ were substituted into @eqRC as shown below.
 
 $ 4.511"V" = 5"V" dot (1 - e^((-0.03669"s")/(1000Omega dot C))) $
 
@@ -381,7 +383,7 @@ Solving for $C$ yielded a result of $C approx 16mu"F"$. The curve from this valu
         label: [Experiment]
       ),
       xlabel: [Time (s)],
-      ylabel: [$V_"out"$],
+      ylabel: [$V_C$],
       legend: (position: bottom + right)
     ),
     inset: (right: 20pt, bottom: 4pt)
@@ -457,7 +459,7 @@ $ V_(n+1) = V_n + (V_"in"-V_n)/R dot (t_"step")/C(V_n) $
 #let approx1_C2 = calc.round((Cadjusted.last() - approx1_C1)/V.last(), digits: 2)
 #let approx1_C2 = 2.29
 
-Using the DC Bias curve from the manufacturer, the same from @C, we can use a function to approximate the capacitance based on voltage. The function used was created to linearly decrease from the rated capacitance at $V = 0$ to the end of the DC bias curve. That is, the function intersects (0V, $22 mu"F"$) and ($6.3"V", #calc.round(Cadjusted.last(), digits: 2) mu"F"$). This function is shown below:
+Using the DC bias curve from the manufacturer, the same from @C, we can use a function to approximate the capacitance based on voltage. The function used was created to linearly decrease from the rated capacitance at $V = 0$ to the end of the DC bias curve. That is, the function intersects (0V, $22 mu"F"$) and ($6.3"V", #calc.round(Cadjusted.last(), digits: 2) mu"F"$). This function is shown below:
 
 $ C(V) = #approx1_C1 mu"F" - (#approx1_C2 mu"F" dot V) $<eqApprox>
 
@@ -493,7 +495,7 @@ $ V_(n+1) = V_n + (V_"in"-V_n)/R dot (t_"step")/(#approx1_C1 mu"F" - #approx1_C2
 == Results
 
 
-#let (simT, simV) = lq.load-txt(read("data/lambert.csv"))
+#let (simT, simV) = lq.load-txt(read("data/sim.csv"))
 #figure(
   block(
     lq.diagram(
@@ -508,12 +510,12 @@ $ V_(n+1) = V_n + (V_"in"-V_n)/R dot (t_"step")/(#approx1_C1 mu"F" - #approx1_C2
         label: [Experiment]
       ),   
       xlabel: [Time (s)],
-      ylabel: [$V_C$],
+      ylabel: [$V$],
       legend: (position: bottom + right)
     ),
     inset: (right: 20pt, bottom: 4pt)
   ),
-  caption: [Simulation versus actual]
+  caption: [Simulation compared to experiment]
 )<sim2>
 
 Using this approximation, a simulation is run using 200 time steps across a 100ms period, that is $t_"step" = 500mu s$. In @sim2, curve obtained is compared with the curve obtained from an experiment in @experimentSection.
@@ -523,7 +525,7 @@ This appears to be much closer to the actual capacitor than what would be predic
 = Deriving New Formula <math>
 
 == Overview
-In this section we will attempt to derive a formula for the same method used in the second part of the previous section.
+In this section we will attempt to derive a formula for the same method used in the simulation.
 
 In @SimImplementation, the approximation $C(V) = #approx1_C1 mu"F" - (#approx1_C2 mu"F" dot V)$ was used. We will continue to use a linear approximation but transfer to a form with arbitrary values. $#approx1_C1 mu"F"$ and $ #approx1_C2 mu"F"$ are replaced with $C_1$ and $C_2$ respectively. Thus the new formula is:
 
@@ -533,18 +535,18 @@ This formula replaces the constant $C$ in @baseRC.
 
 $ V_C = V_"in" - R (C_1 - C_2 dot V_C) (d V_C) / (d t) $
 
-Using this new equation we are able to follow a similar process as shown in @RCderiv.
+Using this new equation we are able to follow a similar process to the one shown in @RCderiv.
 == Results
 
 
-Using the derivation shown in @appB the following equation is found.
+Using the derivation shown in @appB, the following equation is found.
 
 $ (- t) / R = (C_1 - C_2 V_"in") (ln((V_"in" - V_C)/V_"in")) - C_2 V_C $
 
-In this equation, $V_C$, the variable we want to isolate, is both inside and outside the the logarithm. A simplified model of this looks like:
+In this equation, $V_C$, the variable we want to isolate, is both inside and outside the logarithm. A simplified model of this looks like:
 $ x = ln(y) + y $<eqSimplified>
 
-Solving this equation requires the _Lambert W Function_. This function, represented $W$, acts as the inverse of $z e^z$ @bibLambert. That is:
+Solving this equation requires the _Lambert W function_. This function, represented $W$, acts as the inverse of $z e^z$ @bibLambert. That is:
 
 $  W(z e^z) = z $
 
@@ -562,9 +564,9 @@ $ e^x = y e^y $
 #set block(spacing: 1.6em)
 #v(1em)
 
-Here we can apply use the Lambert W function to isolate $y$:
+Here we can apply the Lambert W function to both sides in order to isolate $y$:
 $ W(e^x) = y $
-Using a similar process, found in @appB, we are able to isolate $V_C$. The resulting formula for $V_C$ is shown below.
+Using a similar process we are able to isolate $V_C$. This procedure can be found in @appB. The resulting formula for $V_C$ is shown below.
 
 $ V_"in" - W((C_2 V_"in")/(C_1 - C_2 V_"in") dot e^((R C_2 V_"in"-t)/(R (C_1 - C_2 V_"in"))))(C_1/C_2 - V_"in") $
 
@@ -573,6 +575,8 @@ This formula was implemented in Python, and the results are graphed in @NewFormu
 #let vDeriv = (0.1, 1.0 ,2.0 ,3.0 ,4.0, 4.5 ,4.9, 4.99)
 #let vRange = lq.linspace(0, 199).map(x => x/40)
 #let vDeriv = vRange
+#let (lambertT, lambertV) = lq.load-txt(read("data/lambert.csv"))
+
 #figure(
   block(
     lq.diagram(
@@ -588,13 +592,13 @@ This formula was implemented in Python, and the results are graphed in @NewFormu
         z-index: 1
       ),
       lq.plot(
-        vDeriv.map(x => (modifiedRCFormula(x, 5, 1000, 0.000022, 0.00000229))), vDeriv,
+        lambertT, lambertV,
         mark: none,
         label: [New formula],
         z-index: 1
       ),
       xlabel: [Time (s)],
-      ylabel: [$V_"out"$],
+      ylabel: [$V_C$],
       legend: (position: bottom + right)
     ),
     inset: (right: 20pt, bottom: 4pt)
@@ -602,6 +606,7 @@ This formula was implemented in Python, and the results are graphed in @NewFormu
   caption: [New formula compared to RC formula]
 )<NewFormula>
 
+The results are nearly identical to the simulation in @sim and improve greatly on the commonly used RC formula. Additionally, this method does not require computation of voltages leading up to a specific time.
 
 = Generalization <generalizationSection>
 == Factors Considered
@@ -610,10 +615,10 @@ Up to this point, only one capacitor has been analyzed, but the aim of this pape
 
 Multi-layer ceramic capacitors have many characteristics, but the most important are:
 
-- #strong[Capacitance]: $C$ (e.g, $10mu"F"$) #v(0.3em)
-- #strong[Package Size]: The physical size of the capacitor (e.g, 0805) #v(0.3em)
-- #strong[Maximum Voltage]: The voltage maximum voltage applied across the capacitor where it will not break (e.g, 6.3V) #v(0.3em)
-- #strong[Temperature Coefficient]: The capacitor stability across its temperature range (e.g, X5R)
+- *Capacitance*: $C$ (e.g, $10mu"F"$) #v(0.3em)
+- *Package Size*: The physical size of the capacitor (e.g, 0805) #v(0.3em)
+- *Maximum Voltage*: The maximum voltage applied across the capacitor where it will not break (e.g, 6.3V) #v(0.3em)
+- *Temperature Coefficient*: The capacitor stability across its temperature range (e.g, X5R)
 
 In this paper only 0805 X5R capacitors will be examined due to being one of the most used package sizes and temperature coefficients.
 #let (vmax_V1, vmax_C1, vmax_dif1) = lq.load-txt(read("data/4u76v3S.csv"))
@@ -652,7 +657,7 @@ In this paper only 0805 X5R capacitors will be examined due to being one of the 
   caption: [DC bias of different $V_"max"$]
 )<vmax>
 
-This leaves capacitance and maximum voltage under consideration as factors playing a role in the DC bias characteristics of a capacitor. The second of these, maximum voltage, has a relatively small effect on DC bias as shown in @vmax. The capacitance, on the other hand, will have a large impact effect on DC bias @Samsung. Small value MLCCs will have a relatively small change in capacitance across their full voltage range. A 0.5$mu"F"$ capacitor may only change by few percent of its rated capacitance, while a 50$mu"F"$ capacitor may lose 80%. This effect is shown in @PercentChange.
+This leaves capacitance and maximum voltage under consideration as factors playing a role in the DC bias characteristics of a capacitor. The second of these, maximum voltage, has a relatively small effect on DC bias as shown in @vmax. The capacitance, on the other hand, will have a large impact on DC bias @Samsung. Small value MLCCs will have a relatively small change in capacitance across their full voltage range. A 0.5$mu"F"$ capacitor may only change by few percent of its rated capacitance, while a 50$mu"F"$ capacitor may lose 80%. This effect is shown in @PercentChange.
 
 #let (cap_V1, cap_C1, cap_dif1) = lq.load-txt(read("data/1u16vS.csv"))
 #let (cap_V2, cap_C2, cap_dif2) = lq.load-txt(read("data/2u216vS.csv"))
@@ -770,7 +775,7 @@ Using two points, like in @sim, a linear approximation can be constructed for ea
 )<approxGeneral>
 
 The slope of each approximation can be found using $(Delta C)/(Delta V)$. Using the two points this becomes: $ "Slope" = (C(6V) - "Rated Capacitance") / (6V-0V) $
-The slopes of each approximation are plotted in @slopeC. From this, a function to predict the slope of the linear approximation for DC bias can be created. This function was chosen as $f(C) = 0.19 - 0.155C$.
+The slopes of each approximation are plotted in @slopeC. From this, a a linear function to predict the slope of the approximation for DC bias can be created. This function was chosen as $f(C) = 0.19 - 0.155C$.
 
 #let slopeApprox(x) = (
   x*-0.155 + 0.19
@@ -822,7 +827,7 @@ The slopes of each approximation are plotted in @slopeC. From this, a function t
 )<slopeC>
 
 #let asdfsfd = 0.19/.155
-At $f(1.23)$ this relationship breaks apart as the slope becomes positive, that is capacitance increases with voltage across a capacitor. In reality, the slope will level off to practically zero as the capacitance approaches zero. A better approximation can be created by using a power function. $g(C) = -0.0352C^(8/5)$ which solves the problem of capacitances close to zero.
+At $f(1.23)$ this relationship breaks apart as the slope becomes positive, that is capacitance increases with voltage across a capacitor. In reality, the slope will level off to practically zero as the capacitance approaches zero. A better approximation can be created by using a power function which solves the problem of capacitances close to zero. The function $g(C) = -0.0352C^(8/5)$ was chosen and is plotted in @slopeCbetter.
 
 #let betterSlopeApprox(x) = (
   -0.2 * 0.176 * calc.pow(x, 1.6)
@@ -851,32 +856,32 @@ At $f(1.23)$ this relationship breaks apart as the slope becomes positive, that 
   caption: [Slope of DC bias curve]
 )<slopeCbetter>
 
-Using the rated capacitance as the y-intercept, $C_1$, and the above equation as the slope, $C_2$, we find that in general a 0805 X5R MLCC's DC bias can be approximated with the linear formula shown in @eqFinal.
+Using the rated capacitance as the y-intercept, and the above equation as the slope, we find that, in general, $C_1$ and $C_2$ for a 0805 X5R MLCC can be found using the below equations where $C$ is the rated capacitance.
 
-
-$ C - 0.0352C^(8/5) $<eqFinal>
+$ C_1 = C $
+$ C_2 = 0.0352C^(8/5) $
 
 Combined with the equations derived in @math it is possible to more accurately predict the time it will take for a MLCC used in an RC circuit to rise to a given voltage level.
 
 = Comparison of Methods
-Using @eqFuncOfC for capacitance created the same results for both the simulation and formula, but the simulation offered a greater flexibility. For example, using a simulation would make it possible to model two capacitors with different DC bias curves used in parallel.
+Using @eqFuncOfC for capacitance created the same results for both the simulation and formula, but the simulation offers greater flexibility. For example, using a simulation would make it possible to model two capacitors with different DC bias curves used in parallel.
 
 However, using the formula is more computationally efficient, because it is not neccessary to compute all voltages before a certain time to obtain the voltage at that time.
 
 While the rated capacitance can be used to estimate the effect of DC bias as shown in @generalizationSection, it is more accurate and practical to refer to the curve from the manufacturer and construct a function for capacitance using capacitor specific data.
+
+Experimental results, done in @experimentSection, demonstrated the importance of not relying on the rated capacitance as the 22$mu"F"$ capacitor tested was closer to a 16$mu"F"$ capacitor, a reduction in capacitance of $approx 27%$.
 
 Despite the improvments made in capacitor modelling, there are  other effects that must be taken into consideration such as temperature and aging which also play a large role in MLCC behavior @OpenSource.
 
 
 = Conclusion
 
-Experimental results, done in @experimentSection, demonstrated the importance of not relying on the rated capacitance as the 22$mu"F"$ capacitor tested was closer to a 16$mu"F"$ capacitor, a reduction in capacitance of $approx 27%$.
+The creation of this IA did include a few unexpected turns. Originally SPICE (Simulation Program with Integrated Circuit Emphasis) was going to be used but was replaced by the simulation written in Python due to inflexibilities in the software. The results of this turned out to be quite useful as it was very flexible in modelling the circuit.
 
-The creation of this IA did include a few unexpected turns. Originally SPICE (Simulation Program with Integrated Circuit Emphasis) was going to be used, but was replaced by the simulation written in Python due to inflexibilities in the software. The results of this turned out to be quite useful.
+In @math the usage of the #emph[Lambert W function] was not expected, but proved indispensable in isolating $V_C$.
 
-In @math I did learn about the #emph[Lambert W Function], but its complexity limited its use.
-
-All graphs were created using Lilaq, which made data visualization efficient and flexible. Addtional Typst packages used were Codelst, Equate, and Showybox.
+All graphs were created using Lilaq, which made data visualization efficient and flexible. Additional Typst packages used were Codelst, Equate, and Showybox.
 
 
 
@@ -899,7 +904,7 @@ All graphs were created using Lilaq, which made data visualization efficient and
   caption: [Probing setup]
 )<probing>
 
-A Saleae Logic MSO oscilloscope was used in combination with a PCBite probe and Saleae probe. Alligator clips from a power supply were used.
+A Saleae Logic MSO oscilloscope was used in combination with a PCBite probe and Saleae probe. Alligator clips from a power supply were used. The capacitor used was from Murata and the part number was GRM21BR60J226ME39L. The resistor used was from Susumu and the part number was RG2012P-102-B-T5.
 #v(1em)
 == PCB Layout
 #figure(
@@ -939,13 +944,12 @@ A Saleae Logic MSO oscilloscope was used in combination with a PCBite probe and 
 #pagebreak()
 == Simulation Code
 #sourcefile(read("sim.py"), lang: "py")
-This Python script was used to generate data for all five simulation results shown in @sim @sim1 and @sim2. The variable #emph([C]) in line 34 was changed to #emph[C_bias] or #emph[C] to change whether or not to account for DC bias.
+This Python script was used to generate data for all five simulation results shown in @sim @sim1 and @sim2. The variable #emph([C_bias]) in line 34 was changed to #emph[C_bias] or #emph[C] to change whether or not to account for DC bias.
 
 #pagebreak()
 == Formula Code
 #sourcefile(read("lambert.py"), lang: "py")
-#pagebreak()
-#sourcefile(read("performance.py"), lang: "py")
+This script was used to generate the results of the new formula in @math. The function _lambertw()_ defaults to using the principle branch, $W_0$, of the Lambert W function.
 #pagebreak()
 = Derivations <appB>
 
@@ -956,18 +960,6 @@ This Python script was used to generate data for all five simulation results sho
 #let eqColor4 = purple.lighten(30%)
 #let eqColor5 = purple.lighten(60%)
 #let eqColor6 = purple.lighten(10%)
-
-#let simpleMathNote(body, right, left) = {
-  align(center)[
-    #table(
-      columns: 1,
-      stroke: none,
-      inset: (right: right, left: left),
-      text(size: 9pt, fill: rgb("#c7c7c7"))[#body]
-    )
-    
-  ]
-}
 
 #set block(spacing: 0.0em)
 == Integration of New Formula
@@ -1192,10 +1184,10 @@ This Python script was used to generate data for all five simulation results sho
   #simpleMathNote([Both sides $ div (C_1-C_2 V_"in")$], 0pt, 0pt)
   $ (-t)/((R) dot (C_1 - C_2 V_"in")) =  ln((V_"in" - V_C)/V_"in") - (C_2 V_C)/(C_1 - C_2 V_"in") $
   #simpleMathNote([...], 0pt, 0pt)
-  $ "For simplicity, let" A = 1/(C_1 - C_2 V_"in") $
+  $ "let" A = 1/(C_1 - C_2 V_"in") $
   #simpleMathNote([Replace $1/(C_1 - C_2 V_"in")$ with $A$], 0pt, 0pt)
   $ (-t A)/(R) =  ln((V_"in" - V_C)/V_"in") - A C_2 V_C $
-  #simpleMathNote([$e$ raised to power of both sides], 0pt, 0pt)
+  #simpleMathNote([Exponentiate both sides], 0pt, 0pt)
   $ e^((-t A)/R) =  e^(ln((V_"in" - V_C)/V_"in") - A C_2 V_C) $
   #simpleMathNote([Separate exponent], 0pt, 0pt)
   $ e^((-t A)/R) =  e^(ln((V_"in" - V_C)/V_"in")) e^(- A C_2 V_C) $
@@ -1205,7 +1197,7 @@ This Python script was used to generate data for all five simulation results sho
   $ (e^((-t A)/R)) dot V_"in" =  (V_"in" - V_C) e^(- A C_2 V_C) $
   #simpleMathNote([Manipulate exponent ($ V_C = V_"in" - V_"in" + V_C$)], 0pt, 0pt)
   $ (e^((-t A)/R)) dot V_"in" =  (V_"in" - V_C) e^(- A C_2 (V_"in" - V_"in" + V_C)) $
-  #simpleMathNote([Manipulate exponent$ - V_"in" + V_C = - (V_"in" - V_C)$], 0pt, 0pt)
+  #simpleMathNote([Manipulate exponent $ (- V_"in" + V_C = - (V_"in" - V_C))$], 0pt, 0pt)
   $ (e^((-t A)/R)) dot V_"in" =  (V_"in" - V_C) e^(- A C_2 (V_"in" - (V_"in" - V_C))) $
   #simpleMathNote([Distribute $-A C_2$ in exponent], 0pt, 0pt)
   $ (e^((-t A)/R)) dot V_"in" =  (V_"in" - V_C) e^(-A C_2 V_"in" + A C_2(V_"in" - V_C)) $
@@ -1218,7 +1210,7 @@ This Python script was used to generate data for all five simulation results sho
 ]
 
 #showybox(
-  title: [Isolating],
+  title: [Isolating $V_C$],
   title-style: (color: black),
   frame: (
     title-color: black.transparentize(95%),
@@ -1226,13 +1218,13 @@ This Python script was used to generate data for all five simulation results sho
   )
 )[
   #set block(spacing: 0.7em)
-  $ W((e^((-t A)/R)) (V_"in") (1/(e^(-A C_2 V_"in"))) (A)) =  (A C_2) (V_"in" - V_C) $
+  $ W((e^((-t A)/R)) (V_"in") (1/(e^(-A C_2 V_"in"))) (A C_2)) =  (A C_2) (V_"in" - V_C) $
   #simpleMathNote([$ div (A C_2)$], 0pt, 0pt)
-  $ W((e^((-t A)/R)) (V_"in") (1/(e^(-A C_2 V_"in"))) (A)) dot (1/(A C_2)) = V_"in" - V_C $
+  $ W((e^((-t A)/R)) (V_"in") (1/(e^(-A C_2 V_"in"))) (A C_2)) dot (1/(A C_2)) = V_"in" - V_C $
   #simpleMathNote([$ - (V_"in")$], 0pt, 0pt)
-  $ W((e^((-t A)/R)) (V_"in") (1/(e^(-A C_2 V_"in"))) (A)) dot (1/(A C_2)) - V_"in" =  -V_C $
+  $ W((e^((-t A)/R)) (V_"in") (1/(e^(-A C_2 V_"in"))) (A C_2)) dot (1/(A C_2)) - V_"in" =  -V_C $
   #simpleMathNote([$ dot (-1)$], 0pt, 0pt)
-  $ bold(V_"in" - W((e^((-t A)/R)) (V_"in") (1/(e^(-A V_"in"))) (A C_2)) (1/(A C_2)) =  V_C) $
+  $ bold(V_"in" - W((e^((-t A)/R)) (V_"in") (1/(e^(- A C_2 V_"in"))) (A C_2)) (1/(A C_2)) =  V_C) $
 
 ]
 
@@ -1245,19 +1237,19 @@ This Python script was used to generate data for all five simulation results sho
   )
 )[
   #set block(spacing: 0.7em)
-  $ V_"in" - W((e^((-t A)/R)) (V_"in") (1/(e^(-A V_"in"))) (A C_2)) (1/(A C_2)) =  V_C $
-  #simpleMathNote([Simplify], 0pt, 0pt)
-  $ V_"in" - W((e^((-t)/(R C_1 - R C_2 V_"in")))(A C_2 V_"in") (1/(e^(-A C_2 V_"in")))) dot (1/(A C_2)) =  V_C $
-  #simpleMathNote([Simplify], 0pt, 0pt)
-  $ V_"in" - W((e^((-t)/(R C_1 - R C_2 V_"in")))(A C_2 V_"in") (e^(A C_2 V_"in"))) dot (1/(A C_2)) =  V_C $
-  #simpleMathNote([Simplify], 0pt, 0pt)
-  $ V_"in" - W((e^((-t)/(R C_1 - R C_2 V_"in") + A C_2 V_"in"))(A C_2 V_"in")) dot (1/(A C_2)) =  V_C $
-  #simpleMathNote([Simplify], 0pt, 0pt)
-  $ V_"in" - W(A C_2 V_"in" dot e^((-t)/(R (C_1 - C_2 V_"in")) + A C_2 V_"in")) dot 1/(A C_2) =  V_C $
-  #simpleMathNote([Simplify], 0pt, 0pt)
+  $ V_"in" - W((e^((-t A)/R)) (V_"in") (1/(e^(-A C_2 V_"in"))) (A C_2)) dot (1/(A C_2)) =  V_C $
+  #simpleMathNote([Combine $V_"in"$ and $A C_2$], 0pt, 0pt)
+  $ V_"in" - W((e^((-t A)/R))(A C_2 V_"in") (1/(e^(-A C_2 V_"in")))) dot (1/(A C_2)) =  V_C $
+  #simpleMathNote([Make exponent positive ($1/(a^(-m)) = a^m$)], 0pt, 0pt)
+  $ V_"in" - W((e^((-t A)/R))(A C_2 V_"in") (e^(A C_2 V_"in"))) dot (1/(A C_2)) =  V_C $
+  #simpleMathNote([Combine exponents], 0pt, 0pt)
+  $ V_"in" - W((e^((-t A)/R + A C_2 V_"in"))(A C_2 V_"in")) dot (1/(A C_2)) =  V_C $
+  #simpleMathNote([Rearrange], 0pt, 0pt)
+  $ V_"in" - W(A C_2 V_"in" dot e^((-t A)/(R) + A C_2 V_"in")) dot 1/(A C_2) =  V_C $
+  #simpleMathNote([Substitute in value of $A$ ($A = 1/(C_1 - C_2 V_"in")$)], 0pt, 0pt)
   $ V_"in" - W((C_2 V_"in")/(C_1 - C_2 V_"in") dot e^((-t)/(R (C_1 - C_2 V_"in")) + (C_2 V_"in")/(C_1 - C_2 V_"in"))) dot (C_1 - C_2 V_"in")/(C_2) =  V_C $
-  #simpleMathNote([Simplify], 0pt, 0pt)
-  $ V_"in" - W((C_2 V_"in")/(C_1 - C_2 V_"in") dot e^((R C_2 V_"in"-t)/(R (C_1 - C_2 V_"in")))) dot (C_1/C_2 - V_"in") =  V_C $
+  #simpleMathNote([Add fractions in exponent and simplify outer fraction], 0pt, 0pt)
+  $ bold(V_"in" - W((C_2 V_"in")/(C_1 - C_2 V_"in") dot e^((R C_2 V_"in"-t)/(R (C_1 - C_2 V_"in")))) dot (C_1/C_2 - V_"in") =  V_C) $
 ]
 
 

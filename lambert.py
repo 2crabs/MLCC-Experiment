@@ -21,7 +21,7 @@ C2 = 2.29e-6
 
 #100ms
 end = 0.1
-steps = 5
+steps = 50
 dt = end/steps
 t = 0
 

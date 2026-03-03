@@ -34,7 +34,7 @@ formulaEndTime = time.perf_counter()
 
 sequenceStartTime = time.perf_counter()
 
-steps = 10
+steps = 200
 dt = end/steps
 t = 0
 Vc = 0
